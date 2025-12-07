@@ -29,7 +29,7 @@ const  Footer = () => {
           support@assetverse.com
         </a>
         <a className="link link-hover" href="tel:+1234567890">
-          +1 234 567 890
+          +88 01734 567 890
         </a>
         <div className="flex space-x-4 mt-2">
           <a href="#" className="link link-hover">
