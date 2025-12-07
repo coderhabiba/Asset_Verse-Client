@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Navbar({ user }) {
+const Navbar = ({ user }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -195,3 +195,4 @@ export default function Navbar({ user }) {
     </nav>
   );
 }
+export default Navbar;
