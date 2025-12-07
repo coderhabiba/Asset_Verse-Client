@@ -1,10 +1,41 @@
 import { Link } from 'react-router';
-import logo from '../../assets/logo.png'
+import logo from '../../assets/logo.png';
 import { RiLoginBoxLine } from 'react-icons/ri';
-
 
 const Navbar = ({ user }) => {
   const isHR = user?.role === 'hr';
+  const links = (
+    <>
+      <Link
+        className="px-4 py-2 bg-[#2B233D] border-[0.5px] border-[#4A2878] rounded-2xl transition duration-300"
+        to="/"
+      >
+        Home
+      </Link>
+
+      <Link
+        className="text-gray-300 transition duration-300 hover:text-purple-400"
+        to="/join-employee"
+      >
+        Join as Employee
+      </Link>
+
+      <Link
+        className="text-gray-300 transition duration-300 hover:text-purple-400"
+        to="/join-hr"
+      >
+        Join as HR Manager
+      </Link>
+
+      <Link
+        className="flex items-center px-6 py-3 bg-purple-700 text-white font-bold rounded-2xl shadow-lg hover:bg-purple-600 transition duration-300"
+        to="/login"
+      >
+        <RiLoginBoxLine className="mr-2" size={20} />
+        Login
+      </Link>
+    </>
+  );
 
   return (
     <div className="bg-[#191925] text-white shadow-xl py-4 border-b border-[#2B233D]">
@@ -26,38 +57,9 @@ const Navbar = ({ user }) => {
         </div>
 
         <div className="flex-none hidden md:flex items-center space-x-6">
-          {!user && (
-            <>
-              <Link
-                className="px-4 py-2 bg-[#2B233D] border-[0.5px] border-[#4A2878] rounded-2xl transition duration-300"
-                to="/"
-              >
-                Home
-              </Link>
-
-              <Link
-                className="text-gray-300 transition duration-300 hover:text-purple-400"
-                to="/join-employee"
-              >
-                Join as Employee
-              </Link>
-
-              <Link
-                className="text-gray-300 transition duration-300 hover:text-purple-400"
-                to="/join-hr"
-              >
-                Join as HR Manager
-              </Link>
-
-              <Link
-                className="flex items-center px-6 py-3 bg-purple-700 text-white font-bold rounded-2xl shadow-lg hover:bg-purple-600 transition duration-300"
-                to="/login"
-              >
-                <RiLoginBoxLine className="mr-2" size={20} />
-                Login
-              </Link>
-            </>
-          )}
+          {!user && <>
+            {links}
+          </>}
 
           {user && (
             <div className="dropdown dropdown-end">
@@ -204,35 +206,7 @@ const Navbar = ({ user }) => {
             >
               {!user && (
                 <>
-                  <li>
-                    <Link className="hover:bg-purple-700/50 rounded-md" to="/">
-                      Home
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/join-employee"
-                    >
-                      Join as Employee
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/join-hr"
-                    >
-                      Join as HR Manager
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md font-bold bg-purple-700/30 mt-2"
-                      to="/login"
-                    >
-                      Login
-                    </Link>
-                  </li>
+                  {links}
                 </>
               )}
               {user && isHR && (

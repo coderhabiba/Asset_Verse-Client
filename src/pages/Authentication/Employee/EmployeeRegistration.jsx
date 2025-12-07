@@ -9,10 +9,15 @@ import { Link } from 'react-router';
 
 const EmployeeRegistration = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [dateOfBirth, setDateOfBirth] = useState('');
+
+  const handleDateChange = e => {
+    setDateOfBirth(e.target.value);
+  };
 
   return (
     <div className="flex items-center justify-center py-14">
-      <div className="">
+      <div className="w-full max-w-lg">
         {/* Header Section */}
         <div className="text-center mb-8">
           <FaUserFriends className="mx-auto text-purple-600 text-4xl mb-3" />
@@ -24,7 +29,8 @@ const EmployeeRegistration = () => {
             efficiently.
           </p>
         </div>
-        <div className="w-full max-w-3xl bg-[#191925] p-8 md:p-10 rounded-xl shadow-2xl border border-[#2B233D]">
+
+        <div className="bg-[#191925] p-8 md:p-10 rounded-xl shadow-2xl border border-[#2B233D]">
           {/* Form Body */}
           <form className="space-y-4">
             {/* Full Name & Date of Birth (Two columns) */}
@@ -49,11 +55,14 @@ const EmployeeRegistration = () => {
                 <div className="relative">
                   <input
                     type="date"
-                    placeholder="mm/dd/yyyy"
-                    className="w-full px-4 py-2 border border-[#2B233D] bg-[#0E0C17] text-gray-400 rounded-lg focus:ring-purple-600 focus:border-purple-600 appearance-none outline-none transition duration-300"
+                    value={dateOfBirth}
+                    onChange={handleDateChange}
+                    className={`w-full px-4 py-2 border border-[#2B233D] bg-[#0E0C17] rounded-lg focus:ring-purple-600 focus:border-purple-600 appearance-none outline-none transition duration-300 pr-10
+                      ${dateOfBirth ? 'text-white' : 'text-gray-400'}
+                    `}
                   />
-                  <span className="absolute right-3 top-2.5 text-gray-500">
-                    <IoCalendarOutline />
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+                    <IoCalendarOutline size={20} />
                   </span>
                 </div>
               </div>
@@ -121,7 +130,7 @@ const EmployeeRegistration = () => {
             </button>
           </form>
 
-          {/* Divider / Social Login */}
+          {/* Divider */}
           <div className="flex items-center my-6">
             <div className="grow border-t border-gray-700"></div>
             <span className="mx-4 text-gray-500 text-sm">Or continue with</span>
@@ -138,7 +147,7 @@ const EmployeeRegistration = () => {
           </button>
 
           {/* Footer Links */}
-          <div className="text-center text-xs mt-6 bg-[#2B233D]">
+          <div className="text-center text-xs mt-6">
             <p className="text-gray-500 mb-2">
               By signing up you agree to our{' '}
               <a href="#" className="text-purple-400 hover:underline">
