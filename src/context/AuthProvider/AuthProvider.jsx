@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -7,23 +8,25 @@ import {
   signOut,
   updateProfile,
 } from 'firebase/auth';
-import { AuthContext } from './AuthContext';
 import { auth } from './../../firebase/firebase.config';
-import { useEffect, useState } from 'react';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from './../../firebase/firebase.config';
+import { AuthContext } from './../AuthContext/AuthContext';
+
 
 const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // register
+  // register with email/password
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // sign in
+  // login with email/password
   const signInUser = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
@@ -41,20 +44,46 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  //
+  // update profile
   const updateUserProfile = profile => {
-    return updateProfile(auth.currentUser, profile);
+    if (auth.currentUser) {
+      return updateProfile(auth.currentUser, profile);
+    }
+    return Promise.reject('No user logged in');
   };
 
-  // observe
+  // observe auth state
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, currentUser => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async currentUser => {
+      if (currentUser) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+          const roleData = userDoc.exists() ? userDoc.data().role : null;
+
+          setUser({
+            uid: currentUser.uid,
+            email: currentUser.email,
+            name: currentUser.displayName,
+            photoURL: currentUser.photoURL,
+            role: roleData,
+          });
+        } catch (err) {
+          console.error('Error fetching user role:', err);
+          setUser({
+            uid: currentUser.uid,
+            email: currentUser.email,
+            name: currentUser.displayName,
+            photoURL: currentUser.photoURL,
+            role: null,
+          });
+        }
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
-    return () => {
-      unSubscribe();
-    };
+
+    return () => unsubscribe();
   }, []);
 
   const authInfo = {
