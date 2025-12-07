@@ -4,10 +4,13 @@ import Footer from './../utilities/Footer/Footer';
 
 const RootLayout = () => {
   return (
-    <div className='max-w-[90%] mx-auto'>
+    <div className="">
       <Navbar />
+      <div className="max-w-[90%] mx-auto">
+
       <Outlet />
-      <Footer/>
+      </div>
+      <Footer />
     </div>
   );
 };
