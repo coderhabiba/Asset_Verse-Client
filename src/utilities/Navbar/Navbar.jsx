@@ -1,155 +1,102 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = ({ user }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const isHR = user?.role === 'hr';
 
   return (
-    <nav className="bg-blue-600 text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Logo */}
+    <div className="navbar bg-blue-600 text-white shadow-md px-4">
+      {/* Logo */}
+      <div className="flex-1">
         <Link
           to="/"
-          className="text-2xl font-bold tracking-wide hover:text-gray-200"
+          className="text-xl font-bold tracking-wide hover:text-gray-200"
         >
           AssetVerse
         </Link>
+      </div>
 
-        {/* Public Links */}
-        <div className="hidden md:flex space-x-6">
-          <Link to="/" className="hover:text-gray-200">
-            Home
-          </Link>
-          {!user && (
-            <Link to="/join-employee" className="hover:text-gray-200">
+      {/* Desktop Menu */}
+      <div className="flex-none hidden md:flex">
+        {!user && (
+          <>
+            <Link className="btn btn-ghost text-white mx-2" to="/">
+              Home
+            </Link>
+            <Link className="btn btn-ghost text-white mx-2" to="/join-employee">
               Join as Employee
             </Link>
-          )}
-          {!user && (
-            <Link to="/join-hr" className="hover:text-gray-200">
+            <Link className="btn btn-ghost text-white mx-2" to="/join-hr">
               Join as HR Manager
             </Link>
-          )}
-        </div>
+          </>
+        )}
 
-        {/* Auth / User Menu */}
-        <div className="hidden md:flex items-center space-x-4">
-          {user ? (
-            <div className="relative">
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center space-x-2 hover:bg-blue-500 px-3 py-1 rounded"
-              >
-                <img
-                  src={user.photoURL || 'https://via.placeholder.com/30'}
-                  alt="profile"
-                  className="w-8 h-8 rounded-full"
-                />
-                <span className="font-medium">{user.name || user.email}</span>
-              </button>
-
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded shadow-lg z-50">
-                  {isHR ? (
-                    <>
-                      <Link
-                        to="/assets"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Asset List
-                      </Link>
-                      <Link
-                        to="/add-asset"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Add Asset
-                      </Link>
-                      <Link
-                        to="/requests"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        All Requests
-                      </Link>
-                      <Link
-                        to="/employees"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Employee List
-                      </Link>
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Profile
-                      </Link>
-                      <Link
-                        to="/logout"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Logout
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link
-                        to="/my-assets"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        My Assets
-                      </Link>
-                      <Link
-                        to="/my-team"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        My Team
-                      </Link>
-                      <Link
-                        to="/request-asset"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Request Asset
-                      </Link>
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Profile
-                      </Link>
-                      <Link
-                        to="/logout"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Logout
-                      </Link>
-                    </>
-                  )}
-                </div>
+        {user && (
+          <div className="dropdown dropdown-end">
+            <label
+              tabIndex={0}
+              className="btn btn-ghost rounded-btn flex items-center"
+            >
+              <img
+                src={user.photoURL || 'https://via.placeholder.com/30'}
+                className="w-8 h-8 rounded-full mr-2"
+                alt="profile"
+              />
+              {user.name || user.email}
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu p-2 shadow bg-white text-gray-800 rounded w-52 mt-2"
+            >
+              {user.role === 'hr' ? (
+                <>
+                  <li>
+                    <Link to="/assets">Asset List</Link>
+                  </li>
+                  <li>
+                    <Link to="/add-asset">Add Asset</Link>
+                  </li>
+                  <li>
+                    <Link to="/requests">All Requests</Link>
+                  </li>
+                  <li>
+                    <Link to="/employees">Employee List</Link>
+                  </li>
+                  <li>
+                    <Link to="/profile">Profile</Link>
+                  </li>
+                  <li>
+                    <Link to="/logout">Logout</Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link to="/my-assets">My Assets</Link>
+                  </li>
+                  <li>
+                    <Link to="/my-team">My Team</Link>
+                  </li>
+                  <li>
+                    <Link to="/request-asset">Request Asset</Link>
+                  </li>
+                  <li>
+                    <Link to="/profile">Profile</Link>
+                  </li>
+                  <li>
+                    <Link to="/logout">Logout</Link>
+                  </li>
+                </>
               )}
-            </div>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="px-4 py-2 border border-white rounded hover:bg-white hover:text-blue-600 transition"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="px-4 py-2 bg-white text-blue-600 rounded hover:bg-gray-100 transition"
-              >
-                Register
-              </Link>
-            </>
-          )}
-        </div>
+            </ul>
+          </div>
+        )}
+      </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)}>
+      {/* Mobile Hamburger */}
+      <div className="flex-none md:hidden">
+        <div className="dropdown dropdown-end">
+          <label tabIndex={0} className="btn btn-square btn-ghost">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
@@ -164,35 +111,69 @@ const Navbar = ({ user }) => {
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
-          </button>
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu p-2 shadow bg-white rounded w-52 mt-2 text-gray-800"
+          >
+            {!user && (
+              <>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/join-employee">Join as Employee</Link>
+                </li>
+                <li>
+                  <Link to="/join-hr">Join as HR Manager</Link>
+                </li>
+              </>
+            )}
+            {user && user.role === 'hr' && (
+              <>
+                <li>
+                  <Link to="/assets">Asset List</Link>
+                </li>
+                <li>
+                  <Link to="/add-asset">Add Asset</Link>
+                </li>
+                <li>
+                  <Link to="/requests">All Requests</Link>
+                </li>
+                <li>
+                  <Link to="/employees">Employee List</Link>
+                </li>
+                <li>
+                  <Link to="/profile">Profile</Link>
+                </li>
+                <li>
+                  <Link to="/logout">Logout</Link>
+                </li>
+              </>
+            )}
+            {user && user.role !== 'hr' && (
+              <>
+                <li>
+                  <Link to="/my-assets">My Assets</Link>
+                </li>
+                <li>
+                  <Link to="/my-team">My Team</Link>
+                </li>
+                <li>
+                  <Link to="/request-asset">Request Asset</Link>
+                </li>
+                <li>
+                  <Link to="/profile">Profile</Link>
+                </li>
+                <li>
+                  <Link to="/logout">Logout</Link>
+                </li>
+              </>
+            )}
+          </ul>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-blue-600 px-4 pb-4 space-y-2">
-          <Link to="/" className="block text-white hover:text-gray-200">
-            Home
-          </Link>
-          {!user && (
-            <Link
-              to="/join-employee"
-              className="block text-white hover:text-gray-200"
-            >
-              Join as Employee
-            </Link>
-          )}
-          {!user && (
-            <Link
-              to="/join-hr"
-              className="block text-white hover:text-gray-200"
-            >
-              Join as HR Manager
-            </Link>
-          )}
-        </div>
-      )}
-    </nav>
+    </div>
   );
 }
 export default Navbar;
