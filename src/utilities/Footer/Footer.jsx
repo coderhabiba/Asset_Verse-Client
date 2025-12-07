@@ -1,69 +1,47 @@
 const  Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-10 mt-12">
-      <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
-        {/* About */}
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-2">AssetVerse</h2>
-          <p>Manage your company assets efficiently and transparently.</p>
-        </div>
-
-        {/* Quick Links */}
-        <div>
-          <h3 className="text-xl font-semibold text-white mb-2">Quick Links</h3>
-          <ul>
-            <li>
-              <a href="/" className="hover:text-white">
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="/assets" className="hover:text-white">
-                Assets
-              </a>
-            </li>
-            <li>
-              <a href="/requests" className="hover:text-white">
-                Requests
-              </a>
-            </li>
-            <li>
-              <a href="/analytics" className="hover:text-white">
-                Analytics
-              </a>
-            </li>
-            <li>
-              <a href="/profile" className="hover:text-white">
-                Profile
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Contact / Social */}
-        <div>
-          <h3 className="text-xl font-semibold text-white mb-2">Contact Us</h3>
-          <p>Email: support@assetverse.com</p>
-          <p>Phone: +1 234 567 890</p>
-          <div className="flex space-x-4 mt-2">
-            <a href="#" className="hover:text-white">
-              Facebook
-            </a>
-            <a href="#" className="hover:text-white">
-              Twitter
-            </a>
-            <a href="#" className="hover:text-white">
-              LinkedIn
-            </a>
-            <a href="#" className="hover:text-white">
-              Instagram
-            </a>
-          </div>
-        </div>
+    <footer className="footer p-10 bg-gray-900 text-gray-300 mt-12">
+      <div>
+        <span className="footer-title text-white">AssetVerse</span>
+        <p>Manage your assets efficiently.</p>
+        <p>
+          &copy; {new Date().getFullYear()} AssetVerse. All rights reserved.
+        </p>
       </div>
-
-      <div className="text-center text-gray-500 mt-8">
-        &copy; {new Date().getFullYear()} AssetVerse. All rights reserved.
+      <div>
+        <span className="footer-title text-white">Quick Links</span>
+        <a className="link link-hover" href="/">
+          Home
+        </a>
+        <a className="link link-hover" href="/assets">
+          Assets
+        </a>
+        <a className="link link-hover" href="/requests">
+          Requests
+        </a>
+        <a className="link link-hover" href="/analytics">
+          Analytics
+        </a>
+      </div>
+      <div>
+        <span className="footer-title text-white">Contact</span>
+        <a className="link link-hover" href="mailto:support@assetverse.com">
+          support@assetverse.com
+        </a>
+        <a className="link link-hover" href="tel:+1234567890">
+          +1 234 567 890
+        </a>
+        <div className="flex space-x-4 mt-2">
+          <a href="#" className="link link-hover">
+            Facebook
+          </a>
+          <a href="#" className="link link-hover">
+            Twitter
+          </a>
+          <a href="#" className="link link-hover">
+            LinkedIn
+          </a>
+        </div>
       </div>
     </footer>
   );
