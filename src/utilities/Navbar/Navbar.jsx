@@ -42,7 +42,7 @@ const Navbar = ({ user }) => {
 
   return (
     <div className="bg-[#191925] text-white shadow-xl py-4 border-b border-[#2B233D]">
-      <div className="navbar max-w-[90%] mx-auto">
+      <div className="navbar max-w-[80%] mx-auto">
         <div className="flex-1">
           <NavLink to="/" className="flex items-center space-x-2">
             <div className="w-12 h-12 flex items-center justify-center rounded-full border border-purple-500">

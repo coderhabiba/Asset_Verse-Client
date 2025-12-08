@@ -6,9 +6,8 @@ const RootLayout = () => {
   return (
     <div className="">
       <Navbar />
-      <div className="max-w-[90%] mx-auto">
-
-      <Outlet />
+      <div className="mx-auto">
+        <Outlet />
       </div>
       <Footer />
     </div>

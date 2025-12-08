@@ -16,7 +16,7 @@ import logo from '../../assets/logo.png'
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-br from-[#0F1521] via-[#030306] to-[#0F1521] text-white pt-20 pb-8">
-      <div className="max-w-[90%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 border-b border-gray-700 pb-8">
+      <div className="max-w-[80%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 border-b border-gray-700 pb-8">
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
             <div className="w-12 h-12 rounded-full border border-purple-500">
