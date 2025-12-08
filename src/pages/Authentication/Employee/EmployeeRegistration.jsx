@@ -31,11 +31,8 @@ const EmployeeRegistration = () => {
         </div>
 
         <div className="bg-[#191925] p-8 md:p-10 rounded-xl shadow-2xl border border-[#2B233D]">
-          {/* Form Body */}
           <form className="space-y-4">
-            {/* Full Name & Date of Birth (Two columns) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Full Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
                   Full Name
@@ -47,24 +44,19 @@ const EmployeeRegistration = () => {
                 />
               </div>
 
-              {/* Date of Birth */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
                   Date of Birth
                 </label>
-                <div className="relative">
-                  <input
-                    type="date"
-                    value={dateOfBirth}
-                    onChange={handleDateChange}
-                    className={`w-full px-4 py-2 border border-[#2B233D] bg-[#0E0C17] rounded-lg focus:ring-purple-600 focus:border-purple-600 appearance-none outline-none transition duration-300 pr-10
-                      ${dateOfBirth ? 'text-white' : 'text-gray-400'}
-                    `}
-                  />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
-                    <IoCalendarOutline size={20} />
-                  </span>
-                </div>
+
+                <input
+                  type="date"
+                  value={dateOfBirth}
+                  onChange={handleDateChange}
+                  className={`w-full pl-4 pr-2 py-2 border border-[#2B233D] bg-[#0E0C17] rounded-lg focus:ring-purple-600 focus:border-purple-600 appearance-none outline-none transition duration-300 ${
+                    dateOfBirth ? 'text-white' : 'text-gray-400'
+                  }`}
+                />
               </div>
             </div>
 
@@ -121,7 +113,6 @@ const EmployeeRegistration = () => {
               />
             </div>
 
-            {/* Register Button */}
             <button
               type="submit"
               className="w-full py-3 mt-6 bg-purple-700 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-600 transition duration-300"
