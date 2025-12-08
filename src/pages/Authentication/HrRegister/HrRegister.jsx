@@ -68,7 +68,7 @@ const HrRegistration = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="Acme Corp"
+                  placeholder="Company Name"
                   className="w-full px-4 py-2 border border-[#2B233D] bg-[#0E0C17] text-white rounded-lg focus:ring-purple-600 focus:border-purple-600 outline-none transition duration-300"
                 />
               </div>
@@ -88,9 +88,9 @@ const HrRegistration = () => {
                       ${dateOfBirth ? 'text-white' : 'text-gray-400'}
                     `}
                   />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+                  {/* <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
                     <IoCalendarOutline size={20} />
-                  </span>
+                  </span> */}
                 </div>
               </div>
               <div>

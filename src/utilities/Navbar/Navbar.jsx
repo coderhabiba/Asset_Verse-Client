@@ -1,39 +1,42 @@
-import { Link } from 'react-router';
+import { NavLink } from 'react-router';
 import logo from '../../assets/logo.png';
 import { RiLoginBoxLine } from 'react-icons/ri';
 
 const Navbar = ({ user }) => {
   const isHR = user?.role === 'hr';
+
+  const linkClass = ({ isActive }) =>
+    `px-4 py-2 rounded-2xl transition duration-300 ${
+      isActive
+        ? 'bg-[#342757] border border-purple-900 text-white'
+        : 'text-gray-300 hover:text-purple-400'
+    }`;
+
+  const loginBtnClass = ({ isActive }) =>
+    `flex items-center px-6 py-3 font-bold rounded-2xl shadow-lg transition duration-300 ${
+      isActive
+        ? 'bg-purple-800 text-white'
+        : 'bg-purple-700 text-white hover:bg-purple-600'
+    }`;
+
   const links = (
     <>
-      <Link
-        className="px-4 py-2 bg-[#2B233D] border-[0.5px] border-[#4A2878] rounded-2xl transition duration-300"
-        to="/"
-      >
+      <NavLink className={linkClass} to="/">
         Home
-      </Link>
+      </NavLink>
 
-      <Link
-        className="text-gray-300 transition duration-300 hover:text-purple-400"
-        to="/join-employee"
-      >
+      <NavLink className={linkClass} to="/join-employee">
         Join as Employee
-      </Link>
+      </NavLink>
 
-      <Link
-        className="text-gray-300 transition duration-300 hover:text-purple-400"
-        to="/join-hr"
-      >
+      <NavLink className={linkClass} to="/join-hr">
         Join as HR Manager
-      </Link>
+      </NavLink>
 
-      <Link
-        className="flex items-center px-6 py-3 bg-purple-700 text-white font-bold rounded-2xl shadow-lg hover:bg-purple-600 transition duration-300"
-        to="/login"
-      >
+      <NavLink className={loginBtnClass} to="/login">
         <RiLoginBoxLine className="mr-2" size={20} />
         Login
-      </Link>
+      </NavLink>
     </>
   );
 
@@ -41,8 +44,8 @@ const Navbar = ({ user }) => {
     <div className="bg-[#191925] text-white shadow-xl py-4 border-b border-[#2B233D]">
       <div className="navbar max-w-[90%] mx-auto">
         <div className="flex-1">
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 flex items-center justify-center rounded-full border border-purple-500">
+          <NavLink to="/" className="flex items-center space-x-2">
+            <div className="w-12 h-12 flex items-center justify-center rounded-full border border-purple-500">
               <img src={logo} alt="" />
             </div>
             <div>
@@ -53,13 +56,11 @@ const Navbar = ({ user }) => {
                 Asset Management System
               </p>
             </div>
-          </Link>
+          </NavLink>
         </div>
 
         <div className="flex-none hidden md:flex items-center space-x-6">
-          {!user && <>
-            {links}
-          </>}
+          {!user && <>{links}</>}
 
           {user && (
             <div className="dropdown dropdown-end">
@@ -84,95 +85,62 @@ const Navbar = ({ user }) => {
                 {isHR ? (
                   <>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/assets"
-                      >
+                      <NavLink className={linkClass} to="/assets">
                         Asset List
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/add-asset"
-                      >
+                      <NavLink className={linkClass} to="/add-asset">
                         Add Asset
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/requests"
-                      >
+                      <NavLink className={linkClass} to="/requests">
                         All Requests
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/employees"
-                      >
+                      <NavLink className={linkClass} to="/employees">
                         Employee List
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/profile"
-                      >
+                      <NavLink className={linkClass} to="/profile">
                         Profile
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/logout"
-                      >
+                      <NavLink className={linkClass} to="/logout">
                         Logout
-                      </Link>
+                      </NavLink>
                     </li>
                   </>
                 ) : (
                   <>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/my-assets"
-                      >
+                      <NavLink className={linkClass} to="/my-assets">
                         My Assets
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/my-team"
-                      >
+                      <NavLink className={linkClass} to="/my-team">
                         My Team
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/request-asset"
-                      >
+                      <NavLink className={linkClass} to="/request-asset">
                         Request Asset
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/profile"
-                      >
+                      <NavLink className={linkClass} to="/profile">
                         Profile
-                      </Link>
+                      </NavLink>
                     </li>
                     <li>
-                      <Link
-                        className="hover:bg-purple-700/50 rounded-md"
-                        to="/logout"
-                      >
+                      <NavLink className={linkClass} to="/logout">
                         Logout
-                      </Link>
+                      </NavLink>
                     </li>
                   </>
                 )}
@@ -181,7 +149,7 @@ const Navbar = ({ user }) => {
           )}
         </div>
 
-        {/* mobile menu*/}
+        {/* Mobile menu */}
         <div className="flex-none md:hidden">
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-square btn-ghost text-white">
@@ -204,104 +172,69 @@ const Navbar = ({ user }) => {
               tabIndex={0}
               className="dropdown-content menu p-2 shadow bg-[#2B233D] rounded-box w-52 mt-2 text-gray-200 z-10"
             >
-              {!user && (
-                <>
-                  {links}
-                </>
-              )}
+              {!user && <>{links}</>}
+
               {user && isHR && (
                 <>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/assets"
-                    >
+                    <NavLink className={linkClass} to="/assets">
                       Asset List
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/add-asset"
-                    >
+                    <NavLink className={linkClass} to="/add-asset">
                       Add Asset
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/requests"
-                    >
+                    <NavLink className={linkClass} to="/requests">
                       All Requests
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/employees"
-                    >
+                    <NavLink className={linkClass} to="/employees">
                       Employee List
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/profile"
-                    >
+                    <NavLink className={linkClass} to="/profile">
                       Profile
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/logout"
-                    >
+                    <NavLink className={linkClass} to="/logout">
                       Logout
-                    </Link>
+                    </NavLink>
                   </li>
                 </>
               )}
+
               {user && !isHR && (
                 <>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/my-assets"
-                    >
+                    <NavLink className={linkClass} to="/my-assets">
                       My Assets
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/my-team"
-                    >
+                    <NavLink className={linkClass} to="/my-team">
                       My Team
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/request-asset"
-                    >
+                    <NavLink className={linkClass} to="/request-asset">
                       Request Asset
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/profile"
-                    >
+                    <NavLink className={linkClass} to="/profile">
                       Profile
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
-                      className="hover:bg-purple-700/50 rounded-md"
-                      to="/logout"
-                    >
+                    <NavLink className={linkClass} to="/logout">
                       Logout
-                    </Link>
+                    </NavLink>
                   </li>
                 </>
               )}

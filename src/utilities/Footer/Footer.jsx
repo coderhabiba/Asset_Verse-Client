@@ -11,16 +11,17 @@ import {
   IoMailOutline,
   IoTimeOutline,
 } from 'react-icons/io5';
+import logo from '../../assets/logo.png'
 
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-br from-[#0F1521] via-[#030306] to-[#0F1521] text-white pt-20 pb-8">
       <div className="max-w-[90%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 border-b border-gray-700 pb-8">
-        {/* 1. Logo and Description (Assetverse) */}
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
-            {/* Replace with your actual logo image or component */}
-            <div className="w-10 h-10 bg-purple-700 rounded-lg"></div>
+            <div className="w-12 h-12 rounded-full border border-purple-500">
+              <img src={logo} alt="" />
+            </div>
             <div>
               <p className="text-xl font-bold text-white">ASSETVERSE</p>
               <p className="text-sm text-gray-400">Asset Management System</p>
@@ -40,7 +41,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* 2. Quick Links */}
         <div>
           <h3 className="text-lg font-semibold border-l-4 border-purple-700 pl-2 mb-4">
             Quick Links
@@ -54,7 +54,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* 3. Our Services */}
         <div>
           <h3 className="text-lg font-semibold border-l-4 border-purple-700 pl-2 mb-4">
             Our Services
@@ -68,7 +67,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* 4. Contact Info */}
         <div>
           <h3 className="text-lg font-semibold border-l-4 border-purple-700 pl-2 mb-4">
             Contact Info
@@ -95,7 +93,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Footer Bottom (Copyright and Legal Links) */}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center pt-8 text-gray-400 text-sm">
         <p className="mb-4 md:mb-0">© 2025 ASSETVERSE. All Rights Reserved.</p>
         <div className="flex space-x-4">
