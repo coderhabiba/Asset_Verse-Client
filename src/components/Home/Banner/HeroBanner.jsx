@@ -67,7 +67,7 @@ const HeroBanner = () => {
                 <p className="text-lg md:text-xl text-white mb-6">
                   {banner.description}
                 </p>
-                <button className="btn btn-primary btn-lg">
+                <button className="btn btn-primary btn-lg rounded-xl">
                   {banner.btnText}
                 </button>
               </div>

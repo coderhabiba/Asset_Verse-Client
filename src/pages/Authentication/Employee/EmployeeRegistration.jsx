@@ -18,7 +18,7 @@ const EmployeeRegistration = () => {
   return (
     <div className="flex items-center justify-center py-14">
       <div className="w-full max-w-lg">
-        {/* Header Section */}
+        {/* header */}
         <div className="text-center mb-8">
           <FaUserFriends className="mx-auto text-purple-600 text-4xl mb-3" />
           <h2 className="text-2xl font-bold text-white mb-2">
@@ -60,7 +60,7 @@ const EmployeeRegistration = () => {
               </div>
             </div>
 
-            {/* Email Address */}
+            {/* email */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Email address
@@ -72,7 +72,7 @@ const EmployeeRegistration = () => {
               />
             </div>
 
-            {/* Password */}
+            {/* password */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Password
@@ -101,7 +101,7 @@ const EmployeeRegistration = () => {
               </p>
             </div>
 
-            {/* Photo URL */}
+            {/* photo URL */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Photo URL
@@ -121,23 +121,7 @@ const EmployeeRegistration = () => {
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="flex items-center my-6">
-            <div className="grow border-t border-gray-700"></div>
-            <span className="mx-4 text-gray-500 text-sm">Or continue with</span>
-            <div className="grow border-t border-gray-700"></div>
-          </div>
-
-          {/* Google Sign-in Button */}
-          <button
-            type="button"
-            className="w-full flex items-center justify-center py-3 bg-[#2B233D] text-gray-300 font-semibold rounded-lg shadow-md hover:bg-[#3C3252] transition duration-300"
-          >
-            <FaGoogle className="mr-3 text-lg" />
-            Sign in with Google
-          </button>
-
-          {/* Footer Links */}
+          {/* footer links */}
           <div className="text-center text-xs mt-6">
             <p className="text-gray-500 mb-2">
               By signing up you agree to our{' '}

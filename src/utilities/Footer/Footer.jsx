@@ -12,6 +12,7 @@ import {
   IoTimeOutline,
 } from 'react-icons/io5';
 import logo from '../../assets/logo.png'
+import { NavLink } from 'react-router';
 
 const Footer = () => {
   return (
@@ -23,7 +24,7 @@ const Footer = () => {
               <img src={logo} alt="" />
             </div>
             <div>
-              <p className="text-xl font-bold text-white">ASSETVERSE</p>
+              <p className="text-xl font-bold text-primary">ASSETVERSE</p>
               <p className="text-sm text-gray-400">Asset Management System</p>
             </div>
           </div>
@@ -45,12 +46,22 @@ const Footer = () => {
           <h3 className="text-lg font-semibold border-l-4 border-purple-700 pl-2 mb-4">
             Quick Links
           </h3>
-          <ul className="space-y-3">
-            <LinkItem text="Home" />
-            <LinkItem text="Dashboard" />
-            <LinkItem text="Join as Employee" />
-            <LinkItem text="Join as HR Manager" />
-            <LinkItem text="Login" />
+          <ul className="flex flex-col space-y-3">
+            <NavLink to={"/"}>
+              <LinkItem text="Home" />
+            </NavLink>
+            <NavLink to={""}>
+              <LinkItem text="Dashboard" />
+            </NavLink>
+            <NavLink to={"/join-employee"}>
+              <LinkItem text="Join as Employee" />
+            </NavLink>
+            <NavLink to={"/join-hr"}>
+              <LinkItem text="Join as HR Manager" />
+            </NavLink>
+            <NavLink to={"/login"}>
+              <LinkItem text="Login" />
+            </NavLink>
           </ul>
         </div>
 
