@@ -20,7 +20,7 @@ const RequestAsset = () => {
     try {
       setLoading(true);
       const res = await axiosSecure.get('/assets/available');
-      console.log('Assets fetched:', res.data);
+      // console.log('Assets fetched:', res.data);
       setAssets(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(
@@ -56,7 +56,7 @@ const RequestAsset = () => {
         note,
       };
 
-      console.log('Sending request payload:', payload);
+      // console.log('Sending request payload:', payload);
 
       await axiosSecure.post('/requests', payload);
       Swal.fire('Success', 'Request sent!', 'success');
@@ -79,7 +79,7 @@ const RequestAsset = () => {
     if (!user?.email) return;
     try {
       const res = await axiosSecure.get(`/requests/employee/${user.email}`);
-      console.log('Employee requests:', res.data);
+      // console.log('Employee requests:', res.data);
       setRequests(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(

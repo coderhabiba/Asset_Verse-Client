@@ -10,7 +10,6 @@ const MyTeam = () => {
   const [hrEmail, setHrEmail] = useState('');
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log(members);
   
   /*===============================
     find HR from assigned assets
@@ -36,7 +35,6 @@ const MyTeam = () => {
     try {
       setLoading(true);
       const res = await axiosSecure.get(`/team-members/${email}`);
-      console.log('Raw Team Data from Server:', res.data);
       setMembers(res.data);
     } catch (err) {
       console.error('Failed to load team', err);

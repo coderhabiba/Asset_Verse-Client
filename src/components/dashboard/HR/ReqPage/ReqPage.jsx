@@ -15,7 +15,8 @@ const ReqPage = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const lastFetchedEmail = useRef(null);
-
+  // console.log(requests);
+  
   const fetchRequests = useCallback(
     async (forceRefresh = false) => {
       if (!user?.email) return;
@@ -148,9 +149,7 @@ const ReqPage = () => {
                     <td className="px-6 py-4 rounded-l-2xl border-l border-t border-b border-white/5">
                       <div className="flex flex-col">
                         <span className="font-bold text-white group-hover:text-purple-400 transition-colors uppercase text-sm">
-                          {r.employeeName ||
-                            r.employeeEmail?.split('@')[0] ||
-                            'Unknown'}
+                          {r?.requesterName || 'Unknown'}
                         </span>
                         <span className="text-[10px] text-gray-500 font-medium">
                           {r.employeeEmail || 'No Email'}

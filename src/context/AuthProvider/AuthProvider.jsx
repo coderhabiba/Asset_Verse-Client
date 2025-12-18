@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../AuthContext/AuthContext';
 
-
 const AuthProvider = ({ children }) => {
   const initialUser = (() => {
     const savedUser = localStorage.getItem('user');
@@ -20,21 +19,24 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(initialUser);
   const [loading, setLoading] = useState(initialUser === null);
 
-  // --- express backend login ---
+  // express backend login
   const loginUserWithExpress = async (email, password) => {
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:3000/login', {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        'https://asset-verse-server-sigma.vercel.app/login',
+        {
+          email,
+          password,
+        }
+      );
       const data = res.data;
 
       if (data?.token && data?.user) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         setUser(data.user);
-        return data; 
+        return data;
       }
       throw new Error(data.message || 'Invalid login response from server');
     } catch (err) {
@@ -45,7 +47,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // --- signup ---
+  // signup
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
@@ -56,7 +58,7 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // --- Logout (firebase + localStorage) ---
+  // logout
   const logOut = async () => {
     setLoading(true);
     try {
@@ -75,7 +77,7 @@ const AuthProvider = ({ children }) => {
     return updateProfile(auth.currentUser, profile);
   };
 
-  // --- restore user ---
+  // restore user
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       const savedUser = localStorage.getItem('user');
@@ -92,7 +94,7 @@ const AuthProvider = ({ children }) => {
             currentUser.photoURL || dbUser.profileImage || dbUser.companyLogo,
         };
         setUser(combinedUser);
-        setLoading(false); 
+        setLoading(false);
       } else if (!currentUser && savedUser && token) {
         setUser(JSON.parse(savedUser));
         setLoading(false);
@@ -119,11 +121,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>
-      
-      {loading ? <p>Loading application...</p> : children}
-  
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
 

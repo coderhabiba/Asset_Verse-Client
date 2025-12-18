@@ -17,7 +17,8 @@ const EmployeeDashboard = () => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { logOut, user } = useContext(AuthContext);
-
+  
+   
   const handleLogout = () => {
     logOut();
     navigate('/login');
@@ -48,7 +49,6 @@ const EmployeeDashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-[#0f111a] text-gray-300 font-sans">
-      {/* --- Mobile Overlay --- */}
       <AnimatePresence>
         {sidebarOpen && (
           <motion.div
@@ -61,14 +61,12 @@ const EmployeeDashboard = () => {
         )}
       </AnimatePresence>
 
-      {/* --- Sidebar --- */}
       <aside
         className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-[#161926] border-r border-white/5 transform 
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
         lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl`}
       >
         <div className="h-full flex flex-col">
-          {/* Logo Section */}
           <div className="p-8 flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-tr from-purple-600 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20 text-white font-black text-xl">
               E
@@ -83,7 +81,6 @@ const EmployeeDashboard = () => {
             </div>
           </div>
 
-          {/* Navigation */}
           <nav className="flex-1 px-4 space-y-2 mt-4">
             {menuItems.map(item => (
               <NavLink
@@ -107,18 +104,17 @@ const EmployeeDashboard = () => {
             ))}
           </nav>
 
-          {/* Bottom Profile Info */}
           <div className="p-4 mt-auto">
             <div className="bg-[#0f111a]/50 rounded-2xl p-4 border border-white/5">
               <div className="flex items-center gap-3 mb-4">
                 <img
-                  src={user?.photoURL || 'https://via.placeholder.com/40'}
+                  src={user?.profileImage}
                   className="w-10 h-10 rounded-full object-cover border-2 border-purple-500/30"
                   alt="User"
                 />
                 <div className="overflow-hidden">
                   <p className="text-sm font-bold text-white truncate">
-                    {user?.displayName || 'Employee'}
+                    {user?.name || 'Employee'}
                   </p>
                   <p className="text-[10px] text-gray-500 truncate">
                     {user?.email}
@@ -137,9 +133,7 @@ const EmployeeDashboard = () => {
         </div>
       </aside>
 
-      {/* --- Main Content --- */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        {/* Top Header */}
         <header className="h-20 bg-[#161926]/40 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-6 lg:px-10 flex-shrink-0">
           <div className="flex items-center gap-4">
             <button

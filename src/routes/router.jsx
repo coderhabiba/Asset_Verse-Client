@@ -70,7 +70,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            Component: HRDashboard,
+            element: <h2 className="text-2xl font-bold">Welcome to HR Dashboard!</h2>
           },
           {
             path: 'assets',

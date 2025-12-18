@@ -21,9 +21,8 @@ const AssetList = () => {
   const lastQueryRef = useRef('');
 
   const fetchAssets = useCallback(
-    async (isInitial = false) => {
-      const currentQuery = `page=${page}&search=${search}`;
-      if (!isInitial && lastQueryRef.current === currentQuery) return;
+    async () => {
+      
 
       try {
         setLoading(true);

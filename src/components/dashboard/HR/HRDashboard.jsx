@@ -73,7 +73,6 @@ const HRDashboard = () => {
   const location = useLocation();
   const { user, logOut } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [stats, setStats] = useState({
@@ -176,7 +175,7 @@ const HRDashboard = () => {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-[#0f111a] text-gray-100">
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#161926]/80 backdrop-blur-xl border-r border-white/5 transform ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#161926]/80 backdrop-blur-xl border-r border-white/5 transform flex flex-col ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0 lg:static transition-transform duration-300 ease-in-out`}
       >
@@ -215,13 +214,31 @@ const HRDashboard = () => {
           ))}
         </nav>
 
-        <div className="absolute bottom-8 px-8 w-full">
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-3 text-red-400 hover:text-red-300 transition-colors font-medium"
-          >
-            <HiOutlineLogout size={22} /> Logout
-          </button>
+        <div className="p-4 mt-auto">
+          <div className="bg-[#0f111a]/50 rounded-2xl p-4 border border-white/5">
+            <div className="flex items-center gap-3 mb-4">
+              <img
+                src={user?.companyLogo}
+                className="w-10 h-10 rounded-full object-cover border-2 border-purple-500/30"
+                alt="User"
+              />
+              <div className="overflow-hidden">
+                <p className="text-sm font-bold text-white truncate">
+                  {user?.name || 'HR Manager'}
+                </p>
+                <p className="text-[10px] text-gray-500 truncate">
+                  {user?.email}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all font-bold text-xs uppercase tracking-widest"
+            >
+              <HiOutlineLogout size={16} />
+              Logout
+            </button>
+          </div>
         </div>
       </aside>
 

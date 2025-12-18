@@ -7,10 +7,14 @@ import { AuthContext } from '../../context/AuthContext/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
-  const { user, logOut } = useContext(AuthContext) ?? {};
+  const { user, logOut } = useContext(AuthContext) || {};
   const isHR = user?.role === 'hr';
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const userPhoto =
+    user?.photo || user?.profileImage || user?.companyLogo || user?.photoURL;
+  const userName = user?.name || user?.displayName || 'User';
 
   const closeMenu = () => {
     if (document.activeElement instanceof HTMLElement) {
@@ -64,7 +68,6 @@ const Navbar = () => {
   const dashboardLinks = (
     <>
       {isHR ? (
-        // HR links
         <>
           <li>
             <NavLink
@@ -122,7 +125,6 @@ const Navbar = () => {
           </li>
         </>
       ) : (
-        // employee
         <>
           <li>
             <NavLink
@@ -155,7 +157,7 @@ const Navbar = () => {
             <NavLink
               onClick={closeMenu}
               className={getNavLinkClass}
-              to="/employee-dashboard/request-asset"
+              to="/employee-dashboard/req-asset"
             >
               Request Asset
             </NavLink>
@@ -186,17 +188,14 @@ const Navbar = () => {
     <header className="bg-[#191925] text-white shadow-xl border-b border-[#2B233D] sticky top-0 z-50">
       <div className="max-w-[95%] lg:max-w-[90%] mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          {/* logo */}
           <div className="shrink-0">
             <Logo />
           </div>
 
-          {/* pc navlink public */}
           <nav className="hidden md:flex items-center space-x-2 lg:space-x-4">
             {!user && PublicMenuLinks}
           </nav>
 
-          {/* right */}
           <div className="flex items-center space-x-4">
             {!user && (
               <NavLink className={getAuthButtonClass(true)} to="/login">
@@ -212,11 +211,12 @@ const Navbar = () => {
                   className="p-1 cursor-pointer transition duration-300 flex items-center hover:bg-[#2B233D] rounded-full pr-3"
                 >
                   <div className="relative">
-                    {user.photoURL ? (
+                    {userPhoto ? (
                       <img
-                        src={user.photoURL}
+                        src={userPhoto}
                         className="w-10 h-10 rounded-full object-cover border-2 border-purple-600 p-0.5"
                         alt="profile"
+                        referrerPolicy="no-referrer"
                       />
                     ) : (
                       <FaUserCircle size={38} className="text-purple-400" />
@@ -224,7 +224,7 @@ const Navbar = () => {
                     <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#191925] rounded-full"></span>
                   </div>
                   <span className="text-sm font-semibold text-gray-200 ml-3 hidden lg:inline-block max-w-[120px] truncate">
-                    {user.displayName || 'User'}
+                    {userName}
                   </span>
                 </label>
 
@@ -237,7 +237,7 @@ const Navbar = () => {
                       Signed in as
                     </p>
                     <p className="text-sm font-bold truncate text-gray-100">
-                      {user.email}
+                      {user?.email}
                     </p>
                   </div>
                   {dashboardLinks}
@@ -245,46 +245,39 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* mobile menu toggle */}
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="p-2 text-gray-300 hover:text-white focus:outline-none rounded-lg hover:bg-purple-700/50 transition"
               >
-                {isMenuOpen ? (
-                  <FaTimes size={24} />
-                ) : (
-                  <FaBars size={24} />
-                )}
+                {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* mobile menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden bg-[#1e1e2d] pb-6 px-4 border-t border-purple-900 shadow-2xl"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-[#1e1e2d] overflow-hidden border-t border-purple-900 shadow-2xl"
           >
-            <ul className="flex flex-col space-y-3 mt-4">
+            <ul className="flex flex-col space-y-3 p-4">
               {user ? (
                 dashboardLinks
               ) : (
                 <div className="flex flex-col space-y-2">
                   {PublicMenuLinks}
-                  <div className="pt-4">
+                  <div className="pt-4 border-t border-purple-900/50">
                     <NavLink
                       onClick={closeMenu}
                       className={getAuthButtonClass(true)}
                       to="/login"
                     >
-                      <RiLoginBoxLine className="mr-2" size={20} />
-                      Login
+                      <RiLoginBoxLine className="mr-2" size={20} /> Login
                     </NavLink>
                   </div>
                 </div>

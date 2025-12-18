@@ -23,7 +23,7 @@ const CheckoutForm = ({ selectedPackage, onCancel }) => {
       ),
       hrEmail: user?.email,
     };
-    console.log('Final Data being sent:', paymentData);
+    // console.log('Final Data being sent:', paymentData);
 
     if (paymentData.price <= 0 || !paymentData.employeeLimit) {
       toast.error('Invalid package data selected.');
