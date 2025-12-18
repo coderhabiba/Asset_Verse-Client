@@ -7,58 +7,123 @@ import {
 } from 'firebase/auth';
 import { auth } from './../../firebase/firebase.config';
 import { useEffect, useState } from 'react';
-import { AuthContext } from './../AuthContext/AuthContext';
+import axios from 'axios';
+import { AuthContext } from '../AuthContext/AuthContext';
 
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState();
-  const [loading, setLoading] = useState(true);
+  const initialUser = (() => {
+    const savedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    return savedUser && token ? JSON.parse(savedUser) : null;
+  })();
+  const [user, setUser] = useState(initialUser);
+  const [loading, setLoading] = useState(initialUser === null);
 
-  // register
+  // --- express backend login ---
+  const loginUserWithExpress = async (email, password) => {
+    setLoading(true);
+    try {
+      const res = await axios.post('http://localhost:3000/login', {
+        email,
+        password,
+      });
+      const data = res.data;
+
+      if (data?.token && data?.user) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        setUser(data.user);
+        return data; 
+      }
+      throw new Error(data.message || 'Invalid login response from server');
+    } catch (err) {
+      console.error('Express login error:', err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- signup ---
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // sign in
   const signInUser = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // logout
-  const logOut = () => {
+  // --- Logout (firebase + localStorage) ---
+  const logOut = async () => {
     setLoading(true);
-    return signOut(auth);
+    try {
+      await signOut(auth);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  //
   const updateUserProfile = profile => {
     return updateProfile(auth.currentUser, profile);
   };
 
-  // observe
+  // --- restore user ---
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, currentUser => {
-      setUser(currentUser);
-      setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, currentUser => {
+      const savedUser = localStorage.getItem('user');
+      const token = localStorage.getItem('token');
+
+      if (currentUser && savedUser && token) {
+        const dbUser = JSON.parse(savedUser);
+        const combinedUser = {
+          ...dbUser,
+          uid: currentUser.uid,
+          email: currentUser.email,
+          name: currentUser.displayName || dbUser.name,
+          photo:
+            currentUser.photoURL || dbUser.profileImage || dbUser.companyLogo,
+        };
+        setUser(combinedUser);
+        setLoading(false); 
+      } else if (!currentUser && savedUser && token) {
+        setUser(JSON.parse(savedUser));
+        setLoading(false);
+      } else {
+        setUser(null);
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setLoading(false);
+      }
     });
-    return () => {
-      unSubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   const authInfo = {
     user,
+    setUser,
     loading,
     createUser,
     signInUser,
     logOut,
     updateUserProfile,
+    loginUserWithExpress,
+    setLoading,
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>
+      
+      {loading ? <p>Loading application...</p> : children}
+  
+    </AuthContext.Provider>
   );
 };
 

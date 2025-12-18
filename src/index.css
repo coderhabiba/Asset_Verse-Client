@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 @plugin "daisyui";
 @plugin "daisyui/theme" {
@@ -11,4 +12,5 @@ body{
   background-image: linear-gradient(to bottom right, #18122C, #020204);
   min-height: 100vh;
   background-attachment: fixed;
+  font-family: "Montserrat", sans-serif;
 }

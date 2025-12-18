@@ -1,24 +1,74 @@
-import { FaUserFriends, FaGoogle } from 'react-icons/fa';
-import {
-  IoEyeOffOutline,
-  IoEyeOutline,
-  IoCalendarOutline,
-} from 'react-icons/io5';
-import { useState } from 'react';
-import { Link } from 'react-router';
+import { FaUserFriends } from 'react-icons/fa';
+import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { AuthContext } from '../../../context/AuthContext/AuthContext';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import toast from 'react-hot-toast';
 
 const EmployeeRegistration = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [dateOfBirth, setDateOfBirth] = useState('');
 
+  const { createUser, updateUserProfile, setUser } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+
   const handleDateChange = e => {
     setDateOfBirth(e.target.value);
+  };
+
+  const handleRegister = async e => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const date = form.date.value;
+    const email = form.email.value;
+    const photoURL = form.photo.value;
+    const password = form.password.value;
+
+    try {
+      // firebase create
+      const result = await createUser(email, password);
+      const firebaseUser = result.user;
+
+      // update firebase profile
+      await updateUserProfile({
+        displayName: name,
+        photoURL,
+      });
+
+      // 
+      const res = await axiosSecure.post('/register-employee', {
+        name,
+        email,
+        date,
+        password,
+        photoURL,
+        role: 'employee',
+      });
+
+      if (res.data.insertedId) {
+        // 
+        setUser({
+          ...firebaseUser,
+          displayName: name,
+          photoURL,
+          role: 'employee',
+        });
+        navigate('/employee-dashboard');
+        toast.success('Employee Registered Successfully');
+        toast("No company affiliation");
+      }
+    } catch (err) {
+      toast.error(err.message);
+      console.error(err);
+    }
   };
 
   return (
     <div className="flex items-center justify-center py-14">
       <div className="w-full max-w-lg">
-        {/* header */}
         <div className="text-center mb-8">
           <FaUserFriends className="mx-auto text-purple-600 text-4xl mb-3" />
           <h2 className="text-2xl font-bold text-white mb-2">
@@ -31,7 +81,7 @@ const EmployeeRegistration = () => {
         </div>
 
         <div className="bg-[#191925] p-8 md:p-10 rounded-xl shadow-2xl border border-[#2B233D]">
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleRegister}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">
@@ -39,6 +89,7 @@ const EmployeeRegistration = () => {
                 </label>
                 <input
                   type="text"
+                  name="name"
                   placeholder="Enter your full name"
                   className="w-full px-4 py-2 border border-[#2B233D] bg-[#0E0C17] text-white rounded-lg focus:ring-purple-600 focus:border-purple-600 outline-none transition duration-300"
                 />
@@ -51,6 +102,7 @@ const EmployeeRegistration = () => {
 
                 <input
                   type="date"
+                  name="date"
                   value={dateOfBirth}
                   onChange={handleDateChange}
                   className={`w-full pl-4 pr-2 py-2 border border-[#2B233D] bg-[#0E0C17] rounded-lg focus:ring-purple-600 focus:border-purple-600 appearance-none outline-none transition duration-300 ${
@@ -60,19 +112,18 @@ const EmployeeRegistration = () => {
               </div>
             </div>
 
-            {/* email */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Email address
               </label>
               <input
                 type="email"
+                name="email"
                 placeholder="Enter your email address"
                 className="w-full px-4 py-2 border border-[#2B233D] bg-[#0E0C17] text-white rounded-lg focus:ring-purple-600 focus:border-purple-600 outline-none transition duration-300"
               />
             </div>
 
-            {/* password */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Password
@@ -80,6 +131,7 @@ const EmployeeRegistration = () => {
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  name="password"
                   placeholder="********"
                   className="w-full px-4 py-2 pr-12 border border-[#2B233D] bg-[#0E0C17] text-white rounded-lg focus:ring-purple-600 focus:border-purple-600 outline-none transition duration-300"
                 />
@@ -101,13 +153,13 @@ const EmployeeRegistration = () => {
               </p>
             </div>
 
-            {/* photo URL */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Photo URL
               </label>
               <input
                 type="url"
+                name="photo"
                 placeholder="https://example.com/your-photo.jpg"
                 className="w-full px-4 py-2 border border-[#2B233D] bg-[#0E0C17] text-white rounded-lg focus:ring-purple-600 focus:border-purple-600 outline-none transition duration-300"
               />
@@ -120,20 +172,6 @@ const EmployeeRegistration = () => {
               Register
             </button>
           </form>
-
-          {/* footer links */}
-          <div className="text-center text-xs mt-6">
-            <p className="text-gray-500 mb-2">
-              By signing up you agree to our{' '}
-              <a href="#" className="text-purple-400 hover:underline">
-                Terms of Service
-              </a>{' '}
-              and{' '}
-              <a href="#" className="text-purple-400 hover:underline">
-                Privacy Policy
-              </a>
-            </p>
-          </div>
         </div>
 
         <p className="text-gray-400 text-center text-sm mt-4">

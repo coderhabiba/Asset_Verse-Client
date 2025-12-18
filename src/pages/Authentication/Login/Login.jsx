@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './../../../context/AuthContext/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { loginUserWithExpress } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,93 +16,64 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+      const data = await loginUserWithExpress(email, password);
 
-      const data = await res.json();
-      setLoading(false);
-
-      if (!res.ok) {
-        setError(data.message || 'Login failed');
+      if (!data || !data.user || !data.token) {
+        setError('Invalid login response from server');
         return;
       }
 
-      // Save token to localStorage (JWT)
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-
-      const userData = data.user;
-      localStorage.setItem('user', JSON.stringify(userData));
-
-      if (userData.role === 'hr') {
-        navigate('/hr-dashboard');
-      } else {
-        navigate('/employee-dashboard');
-      }
-      // redirect after login
+      // Role-based redirect
+      const role = data.user.role;
+      if (role === 'hr') navigate('/hr-dashboard');
+      else if (role === 'employee') navigate('/employee-dashboard');
+      else setError('Unknown role — contact admin');
     } catch (err) {
-      setError('Server error');
+      console.error('Login Error:', err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          'Server error occurred. Check server logs.'
+      );
+    } finally {
       setLoading(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center py-20">
-      <div className="bg-[#0E1420] border border-[#7C808A] shadow-lg rounded-xl p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold mb-6 text-center text-primary">
-          AssetVerse Login
+      <div className="bg-secondary border border-purple-950 p-8 rounded-xl max-w-md w-full">
+        <h2 className="text-3xl text-center text-primary font-bold mb-6">
+          Login
         </h2>
+
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1 font-semibold text-gray-300">
-              Email
-            </label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="input input-bordered w-full bg-[#1F2937] text-gray-400 border border-[#7C808A] rounded-xl"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-semibold text-gray-300">
-              Password
-            </label>
-            <input
-              type="password"
-              placeholder="********"
-              className="input input-bordered w-full bg-[#1F2937] text-gray-400 border border-[#7C808A] rounded-xl pt-1"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-            />
-          </div>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="input bg-[#0E0C17] border-purple-950 rounded-2xl text-gray-300 w-full"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="input w-full bg-[#0E0C17] border-purple-950 rounded-2xl text-gray-300"
+            required
+          />
           <button
             type="submit"
-            className={`btn btn-primary w-full border border-[#7C808A] rounded-xl ${
-              loading ? 'loading' : ''
-            }`}
             disabled={loading}
+            className="btn btn-primary w-full rounded-2xl"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-
-        <p className="text-center text-sm mt-4 text-gray-300">
-          Don't have an account?{' '}
-          <button
-            onClick={() => navigate('/register')}
-            className="text-primary font-semibold underline"
-          >
-            Register
-          </button>
-        </p>
       </div>
     </div>
   );

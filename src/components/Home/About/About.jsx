@@ -34,7 +34,7 @@ const aboutItems = [
 
 const About = () => {
   return (
-    <section className="py-20">
+    <section className="pt-28 pb-20">
       <div className="max-w-[80%] mx-auto px-4 text-center">
         <h2 className="text-4xl font-bold mb-4 text-primary">
           Why Choose AssetVerse?
