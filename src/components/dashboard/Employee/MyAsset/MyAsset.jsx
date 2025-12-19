@@ -10,7 +10,7 @@ const MyAssets = () => {
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // fetch assigned assets
+  // get assigned assets
   const fetchMyAssets = async () => {
     if (!user?.email) return;
     try {
@@ -28,7 +28,7 @@ const MyAssets = () => {
     fetchMyAssets();
   }, [user]);
 
-  // --- return asset
+  // return asset
   const handleReturn = async id => {
     const confirm = await Swal.fire({
       title: 'Return asset?',

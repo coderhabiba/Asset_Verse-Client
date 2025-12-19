@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter } from 'react-router-dom'; 
 import RootLayout from '../layouts/RootLayout';
 import Home from './../pages/Home/Home';
 import EmployeeRegistration from '../pages/Authentication/Employee/EmployeeRegistration';
@@ -24,24 +24,24 @@ import HRProfileUpdate from '../components/dashboard/HR/Profile/HRProfileUpdate'
 export const router = createBrowserRouter([
   {
     path: '/',
-    Component: RootLayout,
+    element: <RootLayout />, 
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        Component: Home,
+        element: <Home />,
       },
       {
         path: 'join-employee',
-        Component: EmployeeRegistration,
+        element: <EmployeeRegistration />,
       },
       {
         path: 'join-hr',
-        Component: HrRegister,
+        element: <HrRegister />,
       },
       {
         path: 'login',
-        Component: Login,
+        element: <Login />,
       },
       {
         path: 'hr-profile',
@@ -53,13 +53,12 @@ export const router = createBrowserRouter([
       },
       {
         path: 'dashboard/upgrade/payment-success',
-        Component: UpgradePackage,
+        element: <UpgradePackage />,
       },
       {
         path: 'dashboard/upgrade/payment-cancelled',
-        Component: UpgradePackage,
+        element: <UpgradePackage />,
       },
-
       {
         path: 'hr-dashboard',
         element: (
@@ -70,36 +69,17 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <h2 className="text-2xl font-bold">Welcome to HR Dashboard!</h2>
+            element: (
+              <h2 className="text-2xl font-bold">Welcome to HR Dashboard!</h2>
+            ),
           },
-          {
-            path: 'assets',
-            Component: AssetList,
-          },
-          {
-            path: 'add-asset',
-            Component: AddAsset,
-          },
-          {
-            path: 'requests',
-            Component: ReqPage,
-          },
-          {
-            path: 'employees',
-            Component: EmployeeList,
-          },
-          {
-            path: 'upgrade-package',
-            Component: UpgradePackage,
-          },
-          {
-            path: 'upgrade',
-            Component: UpgradePackage,
-          },
-          {
-            path: 'analytics',
-            Component: Analytics,
-          },
+          { path: 'assets', element: <AssetList /> },
+          { path: 'add-asset', element: <AddAsset /> },
+          { path: 'requests', element: <ReqPage /> },
+          { path: 'employees', element: <EmployeeList /> },
+          { path: 'upgrade-package', element: <UpgradePackage /> },
+          { path: 'upgrade', element: <UpgradePackage /> },
+          { path: 'analytics', element: <Analytics /> },
         ],
       },
       {
@@ -113,25 +93,15 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: (
-              <h2 className="text-2xl font-bold">Welcome to employee's own Dashboard!</h2>
+              <h2 className="text-2xl font-bold">
+                Welcome to employee's own Dashboard!
+              </h2>
             ),
           },
-          {
-            path: 'my-assets',
-            Component: MyAssets,
-          },
-          {
-            path: 'req-asset',
-            Component: RequestAsset,
-          },
-          {
-            path: 'my-team',
-            Component: MyTeam,
-          },
-          {
-            path: 'profile',
-            Component: ProfilePage,
-          },
+          { path: 'my-assets', element: <MyAssets /> },
+          { path: 'req-asset', element: <RequestAsset /> },
+          { path: 'my-team', element: <MyTeam /> },
+          { path: 'profile', element: <ProfilePage /> },
         ],
       },
     ],

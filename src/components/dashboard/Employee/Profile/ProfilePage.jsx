@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import useAxiosSecure from './../../../../hooks/useAxiosSecure';
-import { AuthContext } from './../../../../context/AuthContext/AuthContext';
+import { AuthContext } from '../../../../context/AuthContext/AuthContext';
+
 
 
 const ProfilePage = () => {
@@ -13,9 +14,8 @@ const ProfilePage = () => {
   const [dob, setDob] = useState('');
   const [loading, setLoading] = useState(true);
 
-  /* =========================
-     load profile
-     ========================= */
+  
+  // load profile 
   const fetchProfile = async () => {
     try {
       const res = await axiosSecure.get(`/user/${user.email}`);
@@ -35,9 +35,6 @@ const ProfilePage = () => {
     }
   }, [user]);
 
-  /* =========================
-    update profile
-  ========================= */
   const handleUpdate = async e => {
     e.preventDefault();
 

@@ -12,7 +12,8 @@ import {
   IoTimeOutline,
 } from 'react-icons/io5';
 import logo from '../../assets/logo.png';
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink } from 'react-router-dom';
+import Logo from '../../components/Logo/Logo';
 
 
 const SocialIcon = ({ icon }) => (
@@ -61,20 +62,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
           <div className="space-y-6">
-            <div className="flex items-center space-x-3">
-              <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
-                <div className="relative w-12 h-12 rounded-full bg-[#161B2B] p-1 overflow-hidden border border-white/10">
-                  <img src={logo} alt="AssetVerse" className="w-full h-full object-contain" />
-                </div>
-              </div>
-              <div>
-                <h2 className="text-2xl font-black tracking-tighter text-white">
-                  ASSET<span className="text-purple-500">VERSE</span>
-                </h2>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">Management System</p>
-              </div>
-            </div>
+            <Logo/>
 
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
               Optimizing asset lifecycles and operational efficiency through 

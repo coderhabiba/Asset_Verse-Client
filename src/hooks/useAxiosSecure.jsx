@@ -1,46 +1,42 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from './../context/AuthContext/AuthContext';
-import { useContext, useEffect } from 'react';
+import { useContext, useMemo } from 'react';
+import { AuthContext } from '../context/AuthContext/AuthContext';
 
-const axiosSecure = axios.create({
-  baseURL: 'https://asset-verse-server-sigma.vercel.app',
-});
 
 const useAxiosSecure = () => {
   const navigate = useNavigate();
   const { logOut } = useContext(AuthContext);
 
-  useEffect(() => {
-    const requestInterceptor = axiosSecure.interceptors.request.use(
+  const axiosSecure = useMemo(() => {
+    const instance = axios.create({
+      baseURL: 'https://asset-verse-server-sigma.vercel.app',
+    });
+
+    instance.interceptors.request.use(
       config => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('access-token');
         if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
+          config.headers.authorization = `Bearer ${token}`;
         }
         return config;
       },
       error => Promise.reject(error)
     );
 
-    const responseInterceptor = axiosSecure.interceptors.response.use(
+    instance.interceptors.response.use(
       response => response,
       async error => {
         const status = error.response?.status;
         if (status === 401 || status === 403) {
           await logOut();
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
           navigate('/login');
         }
         return Promise.reject(error);
       }
     );
 
-    return () => {
-      axiosSecure.interceptors.request.eject(requestInterceptor);
-      axiosSecure.interceptors.response.eject(responseInterceptor);
-    };
+    return instance;
   }, [logOut, navigate]);
 
   return axiosSecure;

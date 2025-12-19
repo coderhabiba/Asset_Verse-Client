@@ -17,7 +17,7 @@ const AuthProvider = ({ children }) => {
     return savedUser && token ? JSON.parse(savedUser) : null;
   })();
   const [user, setUser] = useState(initialUser);
-  const [loading, setLoading] = useState(initialUser === null);
+  const [loading, setLoading] = useState(true);
 
   // express backend login
   const loginUserWithExpress = async (email, password) => {
@@ -84,26 +84,28 @@ const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
 
       if (currentUser && savedUser && token) {
-        const dbUser = JSON.parse(savedUser);
-        const combinedUser = {
-          ...dbUser,
-          uid: currentUser.uid,
-          email: currentUser.email,
-          name: currentUser.displayName || dbUser.name,
-          photo:
-            currentUser.photoURL || dbUser.profileImage || dbUser.companyLogo,
-        };
-        setUser(combinedUser);
-        setLoading(false);
+        try {
+          const dbUser = JSON.parse(savedUser);
+          const combinedUser = {
+            ...dbUser,
+            uid: currentUser.uid,
+            email: currentUser.email,
+            name: currentUser.displayName || dbUser.name,
+            photo:
+              currentUser.photoURL || dbUser.profileImage || dbUser.companyLogo,
+          };
+          setUser(combinedUser);
+        } catch (e) {
+          console.error('Error parsing saved user', e);
+        }
       } else if (!currentUser && savedUser && token) {
         setUser(JSON.parse(savedUser));
-        setLoading(false);
       } else {
         setUser(null);
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        setLoading(false);
+        if (savedUser) localStorage.removeItem('user');
+        if (token) localStorage.removeItem('token');
       }
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);

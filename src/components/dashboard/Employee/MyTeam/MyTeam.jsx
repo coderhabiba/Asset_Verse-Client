@@ -11,9 +11,8 @@ const MyTeam = () => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  /*===============================
-    find HR from assigned assets
-  =================================*/
+  
+  // find HR from assigned assets
   const fetchMyCompany = async () => {
     try {
       const res = await axiosSecure.get(`/assigned-assets/${user.email}`);
@@ -27,9 +26,8 @@ const MyTeam = () => {
     }
   };
 
-  /*=========================
-    fetch team members
-  ========================= */
+ 
+  // fetch team members
   const fetchTeamMembers = async email => {
     if (!email) return;
     try {
@@ -104,7 +102,6 @@ const MyTeam = () => {
 
       {/* upcoming birthdays */}
       <h3 className="mt-5 font-bold text-primary">Upcoming Birthdays</h3>
-
       <p className="text-sm text-gray-400">Feature coming soon 🎂</p>
     </div>
   );
