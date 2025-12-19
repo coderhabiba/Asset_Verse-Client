@@ -14,32 +14,25 @@ const AssetList = () => {
   const [assets, setAssets] = useState([]);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [limit] = useState(5);
+  const [limit] = useState(10); 
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [editingAsset, setEditingAsset] = useState(null);
-  const lastQueryRef = useRef('');
 
-  const fetchAssets = useCallback(
-    async () => {
-      
-
-      try {
-        setLoading(true);
-        const res = await axiosSecure.get(
-          `/assets?page=${page}&limit=${limit}&search=${search}`
-        );
-        setAssets(Array.isArray(res.data.assets) ? res.data.assets : []);
-        setTotal(res.data.total || 0);
-        lastQueryRef.current = currentQuery;
-      } catch (err) {
-        console.error('Error loading assets:', err);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [page, limit, search, axiosSecure]
-  );
+  const fetchAssets = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await axiosSecure.get(
+        `/assets?page=${page}&limit=${limit}&search=${search}`
+      );
+      setAssets(Array.isArray(res.data.assets) ? res.data.assets : []);
+      setTotal(res.data.total || 0);
+    } catch (err) {
+      console.error('Error loading assets:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, limit, search, axiosSecure]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -68,10 +61,17 @@ const AssetList = () => {
           title: 'Deleted!',
           icon: 'success',
           background: '#161926',
+          color: '#fff',
         });
-        fetchAssets(true);
+        fetchAssets();
       } catch (err) {
-        Swal.fire('Error', 'Failed to delete asset.', 'error');
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to delete asset.',
+          icon: 'error',
+          background: '#161926',
+          color: '#fff',
+        });
       }
     }
   };
@@ -82,7 +82,7 @@ const AssetList = () => {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-6 bg-[#161926]/60 backdrop-blur-xl rounded-2xl border border-white/5 shadow-2xl min-h-[600px]"
+      className="p-6 bg-[#161926]/60 backdrop-blur-xl rounded-2xl border border-white/5 shadow-2xl min-h-150"
     >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
         <div>
@@ -148,7 +148,7 @@ const AssetList = () => {
                 >
                   <td className="px-6 py-4 rounded-l-2xl border-l border-t border-b border-white/5">
                     <div className="flex items-center gap-4">
-                      <div className="relative h-12 w-12 flex-shrink-0">
+                      <div className="relative h-12 w-12 shrink-0">
                         <img
                           src={asset.image || 'https://via.placeholder.com/150'}
                           alt={asset.name}
@@ -218,6 +218,7 @@ const AssetList = () => {
         </table>
       </div>
 
+      {/* pagination logic */}
       {!loading && totalPages > 1 && (
         <div className="flex justify-center mt-12">
           <div className="flex bg-[#0f111a]/80 p-1.5 rounded-2xl border border-white/5 shadow-2xl backdrop-blur-md">
@@ -244,7 +245,7 @@ const AssetList = () => {
             asset={editingAsset}
             onClose={updated => {
               setEditingAsset(null);
-              if (updated) fetchAssets(true);
+              if (updated) fetchAssets();
             }}
           />
         )}
