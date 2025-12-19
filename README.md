@@ -1,16 +1,38 @@
-# React + Vite
+# AssetVerse | Corporate Asset Management System (Client)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**AssetVerse** is a sophisticated web application designed to streamline the tracking and management of corporate assets. It provides distinct interfaces for employees to request resources and HR managers to oversee inventory and assignments.
 
-Currently, two official plugins are available:
+- **Live URL:** [https://asset-verse.netlify.app](https://asset-verse.netlify.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Key Features
+* **Role-Based Access Control:** Dedicated dashboards for Employees and HR Managers.
+* **Dynamic Inventory:** Real-time tracking of returnable and non-returnable assets.
+* **Asset Request System:** Seamless workflow for employees to request items with custom notes.
+* **Interactive Team View:** Directory for employees to see colleagues and upcoming birthdays.
+* **PDF Report Generation:** Generate printable receipts and reports for assigned assets.
+* **Modern UI/UX:** Built with a dark-themed, glassmorphic design using Tailwind CSS.
 
-## React Compiler
+## 🛠️ Tech Stack & Packages
+* **Core:** React.js, Vite, React Router Dom
+* **State & Data:** Context API, TanStack Query (React Query), Axios
+* **UI/UX:** Tailwind CSS, DaisyUI, Framer Motion, React Icons
+* **Feedback:** SweetAlert2, React Hot Toast
+* **Utilities:** Moment.js, LocalForage
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 💻 Setup Instructions
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/coderhabiba/Asset_Verse-Client](https://github.com/coderhabiba/Asset_Verse-Client)
 
-## Expanding the ESLint configuration
+2. Navigate to the client folder:
+```bash
+   cd assetverse/client
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+3. Install dependencies:
+   ```bash
+   npm install
+
+4. Start the development server:
+
+   ```bash
+   npm run dev   
