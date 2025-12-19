@@ -16,7 +16,7 @@ const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     return savedUser && token ? JSON.parse(savedUser) : null;
   })();
-  const [user, setUser] = useState(initialUser);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // express backend login
@@ -79,7 +79,7 @@ const AuthProvider = ({ children }) => {
 
   // restore user
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, currentUser => {
+    const unsubscribe = onAuthStateChanged(auth, async currentUser => {
       const savedUser = localStorage.getItem('user');
       const token = localStorage.getItem('token');
 
@@ -98,15 +98,20 @@ const AuthProvider = ({ children }) => {
         } catch (e) {
           console.error('Error parsing saved user', e);
         }
-      } else if (!currentUser && savedUser && token) {
+      }
+      else if (!currentUser && savedUser && token) {
         setUser(JSON.parse(savedUser));
-      } else {
-        setUser(null);
-        if (savedUser) localStorage.removeItem('user');
-        if (token) localStorage.removeItem('token');
+      }
+      else {
+        if (!token) {
+          setUser(null);
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+        }
       }
       setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 

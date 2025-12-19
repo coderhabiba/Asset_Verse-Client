@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './../../../../context/AuthContext/AuthContext';
 import toast from 'react-hot-toast';
 import {
@@ -7,8 +7,10 @@ import {
   FaSave,
   FaImage,
   FaSpinner,
+  FaCamera,
 } from 'react-icons/fa';
-import { MdEmail, MdWork } from 'react-icons/md';
+import { MdEmail, MdWork, MdVerifiedUser } from 'react-icons/md';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const HRProfileUpdate = () => {
   const {
@@ -16,29 +18,33 @@ const HRProfileUpdate = () => {
     updateUserProfile,
     loading: authLoading,
   } = useContext(AuthContext) ?? {};
+
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
   const [isSaving, setIsSaving] = useState(false);
 
-  const role = user?.role === 'hr' ? 'HR Manager' : 'Unknown';
+  useEffect(() => {
+    if (user) {
+      setDisplayName(user.displayName || '');
+      setPhotoURL(user.photoURL || '');
+    }
+  }, [user]);
+
+  const role = user?.role === 'hr' ? 'HR Manager' : 'Admin';
 
   const handleSaveProfile = async e => {
     e.preventDefault();
     setIsSaving(true);
-    const toastId = toast.loading('Updating profile...');
+    const toastId = toast.loading('Synchronizing profile...');
 
     try {
-      if (displayName !== user?.displayName || photoURL !== user?.photoURL) {
-        await updateUserProfile(displayName, photoURL);
-      }
-      setDisplayName(user?.displayName);
-      setPhotoURL(user?.photoURL);
+      await updateUserProfile(displayName, photoURL);
       setIsEditing(false);
       toast.success('Profile updated successfully!', { id: toastId });
     } catch (error) {
       console.error('Profile update failed:', error);
-      toast.error('Failed to update profile. Please try again.', {
+      toast.error('Update failed. Please check your connection.', {
         id: toastId,
       });
     } finally {
@@ -48,148 +54,216 @@ const HRProfileUpdate = () => {
 
   if (authLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-white">
-        <FaSpinner className="animate-spin text-4xl text-purple-600" />
-        <p className="ml-3">Loading profile data...</p>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="flex justify-center items-center min-h-screen text-red-400">
-        <p>You must be logged in to view this page.</p>
+      <div className="flex flex-col justify-center items-center min-h-[60vh]">
+        <span className="loading loading-infinity loading-lg text-indigo-500"></span>
+        <p className="mt-4 text-gray-500 font-black uppercase tracking-[0.3em] text-xs">
+          Loading Security Data
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen max-w-[90%] mx-auto py-10">
-      {/* header */}
-      <header className="mb-10 text-center">
-        <h2 className="text-4xl font-extrabold text-white mb-2">My Profile</h2>
-        <p className="text-gray-400 text-lg">
-          Manage your personal and HR details.
+    <div className="max-w-6xl mx-auto py-6 px-4">
+      <div className="mb-10">
+        <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic flex items-center gap-4">
+          Identity <span className="text-indigo-500 italic">Settings</span>
+        </h2>
+        <p className="text-gray-500 font-medium mt-1">
+          Update your administrative credentials and profile appearance.
         </p>
-      </header>
+      </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* profile display card */}
-        <div className="lg:w-1/3 p-6 bg-[#2B233D] rounded-xl shadow-2xl border border-purple-800 h-fit">
-          <div className="flex flex-col items-center">
-            {/* img */}
-            {user.photoURL ? (
-              <img
-                src={user.photoURL}
-                alt={user.displayName || user.email}
-                className="w-32 h-32 rounded-full object-cover border-4 border-purple-600 shadow-lg mb-4"
-              />
-            ) : (
-              <FaUserCircle className="w-32 h-32 text-purple-600 mb-4" />
-            )}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#161926] rounded-[2.5rem] border border-white/5 p-8 text-center relative overflow-hidden shadow-2xl"
+          >
+            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-indigo-600/20 to-transparent" />
 
-            <h3 className="text-2xl font-bold text-white mb-1">
-              {user?.displayName || ''}
-            </h3>
+            <div className="relative z-10">
+              <div className="relative inline-block group">
+                {user?.photoURL || photoURL ? (
+                  <img
+                    src={photoURL || user?.photoURL}
+                    className="w-40 h-40 rounded-[2.5rem] object-cover border-4 border-[#0D0D15] shadow-2xl transition-transform duration-500 group-hover:scale-105"
+                    alt="Profile"
+                  />
+                ) : (
+                  <div className="w-40 h-40 rounded-[2.5rem] bg-[#0D0D15] flex items-center justify-center border-4 border-indigo-500/20">
+                    <FaUserCircle className="w-24 h-24 text-gray-700" />
+                  </div>
+                )}
+                {isEditing && (
+                  <div className="absolute inset-0 bg-indigo-600/40 rounded-[2.5rem] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                    <FaCamera className="text-white text-2xl" />
+                  </div>
+                )}
+              </div>
 
-            <div className="text-gray-400 space-y-2 mt-4 text-center w-full">
-              <p className="flex items-center justify-center gap-2 text-md font-medium">
-                <MdEmail className="text-purple-400" />
-                <span>{user.email}</span>
-              </p>
-              <p className="flex items-center justify-center gap-2 text-md font-medium">
-                <MdWork className="text-purple-400" />
-                <span className="text-green-400 font-bold">{role}</span>
-              </p>
+              <div className="mt-6">
+                <h3 className="text-2xl font-black text-white tracking-tight">
+                  {user?.displayName || 'Administrator'}
+                </h3>
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-full border border-indigo-500/20">
+                    {role}
+                  </span>
+                  <MdVerifiedUser className="text-emerald-500" />
+                </div>
+              </div>
+
+              <div className="mt-8 space-y-3">
+                <div className="flex items-center gap-3 p-4 bg-[#0D0D15] rounded-2xl border border-white/5">
+                  <MdEmail className="text-indigo-500 text-xl" />
+                  <span className="text-sm text-gray-400 font-bold truncate">
+                    {user?.email}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsEditing(!isEditing)}
+                className={`mt-8 w-full py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 ${
+                  isEditing
+                    ? 'bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white'
+                    : 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20 hover:bg-indigo-700'
+                }`}
+              >
+                {isEditing ? 'Cancel Edit' : 'Edit Profile'}
+              </button>
             </div>
-          </div>
-
-          <div className="mt-6 border-t border-gray-700 pt-4">
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className="btn w-full btn-primary hover:bg-purple-700 text-white font-bold"
-            >
-              <FaEdit />
-              {isEditing ? 'Close Editing' : 'Edit Profile'}
-            </button>
-          </div>
+          </motion.div>
         </div>
 
-        {/* profile update form */}
-        <div className="lg:w-2/3 p-8 bg-[#191925] rounded-xl shadow-2xl border border-gray-700">
-          <h3 className="text-3xl font-bold text-white mb-6 border-b border-gray-700 pb-3">
-            {isEditing ? 'Update Your Information' : 'Profile Details'}
-          </h3>
+        <div className="lg:col-span-8">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-[#161926] rounded-[2.5rem] border border-white/5 p-10 shadow-2xl relative overflow-hidden h-full"
+          >
+            <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-8 flex items-center gap-3">
+              Information <span className="text-indigo-500">Details</span>
+            </h3>
 
-          <form onSubmit={handleSaveProfile} className="space-y-6">
-            {/* name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={displayName}
-                onChange={e => setDisplayName(e.target.value)}
-                disabled={!isEditing}
-                required
-                className={`w-full p-3 rounded-lg bg-[#2B233D] border ${
-                  isEditing
-                    ? 'border-purple-600 text-white'
-                    : 'border-gray-700 text-gray-400'
-                } focus:ring-purple-500 focus:border-purple-500 transition duration-300`}
-              />
-            </div>
+            <form onSubmit={handleSaveProfile} className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Name Input */}
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">
+                    Full Name
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={displayName}
+                      onChange={e => setDisplayName(e.target.value)}
+                      readOnly={!isEditing}
+                      className={`w-full p-4 bg-[#0D0D15] rounded-2xl border transition-all duration-300 outline-none font-bold ${
+                        isEditing
+                          ? 'border-indigo-500 ring-4 ring-indigo-500/10 text-white'
+                          : 'border-white/5 text-gray-500'
+                      }`}
+                    />
+                    {!isEditing && (
+                      <MdVerifiedUser className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700" />
+                    )}
+                  </div>
+                </div>
 
-            {/* photo URL */}
-            <div>
-              <label className="text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
-                <FaImage /> Photo URL
-              </label>
-              <input
-                type="url"
-                value={photoURL}
-                onChange={e => setPhotoURL(e.target.value)}
-                disabled={!isEditing}
-                className={`w-full p-3 rounded-lg bg-[#2B233D] border ${
-                  isEditing
-                    ? 'border-purple-600 text-white'
-                    : 'border-gray-700 text-gray-400'
-                } focus:ring-purple-500 focus:border-purple-500 transition duration-300`}
-              />
-            </div>
-
-            {/* email field (disabled) */}
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Email (Cannot be changed)
-              </label>
-              <input
-                type="email"
-                value={user.email}
-                disabled
-                className="w-full p-3 rounded-lg bg-gray-700 border border-gray-700 text-gray-500 cursor-not-allowed"
-              />
-            </div>
-
-            {/* save btn */}
-            {isEditing && (
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className="btn btn-success hover:bg-green-300 font-bold px-6 py-3 rounded-lg shadow-lg disabled:opacity-50 transition duration-300"
-                >
-                  {isSaving ? (
-                    <FaSpinner className="animate-spin mr-2" />
-                  ) : (
-                    <FaSave className="mr-2" />
-                  )}
-                  {isSaving ? 'Saving...' : 'Save Changes'}
-                </button>
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">
+                    Assigned Role
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={role}
+                      disabled
+                      className="w-full p-4 bg-[#0D0D15] rounded-2xl border border-white/5 text-gray-600 font-bold cursor-not-allowed uppercase text-xs"
+                    />
+                    <MdWork className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700" />
+                  </div>
+                </div>
               </div>
-            )}
-          </form>
+
+              {/* photo URL */}
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">
+                  Avatar Resource URL
+                </label>
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-500">
+                    <FaImage />
+                  </div>
+                  <input
+                    type="url"
+                    value={photoURL}
+                    onChange={e => setPhotoURL(e.target.value)}
+                    readOnly={!isEditing}
+                    placeholder="https://example.com/photo.jpg"
+                    className={`w-full p-4 pl-12 bg-[#0D0D15] rounded-2xl border transition-all duration-300 outline-none font-bold ${
+                      isEditing
+                        ? 'border-indigo-500 ring-4 ring-indigo-500/10 text-white'
+                        : 'border-white/5 text-gray-500'
+                    }`}
+                  />
+                </div>
+                {isEditing && (
+                  <p className="text-[10px] text-indigo-400 font-bold italic ml-1">
+                    Provide a valid image URL to update your avatar.
+                  </p>
+                )}
+              </div>
+
+              {/* email */}
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">
+                  Access Email (Locked)
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={user?.email}
+                    disabled
+                    className="w-full p-4 bg-[#0D0D15]/50 rounded-2xl border border-white/5 text-gray-700 font-bold italic"
+                  />
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                    <span className="text-[8px] font-black uppercase text-gray-700">
+                      Encrypted
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* save btn */}
+              <AnimatePresence>
+                {isEditing && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="pt-6"
+                  >
+                    <button
+                      type="submit"
+                      disabled={isSaving}
+                      className="flex items-center justify-center gap-3 px-10 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-xl shadow-emerald-900/20 transition-all duration-300 disabled:opacity-50"
+                    >
+                      {isSaving ? (
+                        <FaSpinner className="animate-spin text-lg" />
+                      ) : (
+                        <FaSave className="text-lg" />
+                      )}
+                      {isSaving ? 'Syncing...' : 'Apply Changes'}
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </form>
+          </motion.div>
         </div>
       </div>
     </div>

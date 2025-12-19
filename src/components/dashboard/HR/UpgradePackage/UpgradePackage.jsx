@@ -5,7 +5,8 @@ import {
   MdAttachMoney,
   MdCheckCircle,
   MdCancel,
-} from 'react-icons/md'; 
+  MdUpgrade,
+} from 'react-icons/md';
 import CheckoutForm from './CheckoutForm';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 
@@ -15,11 +16,11 @@ const UpgradePackage = () => {
   const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
   const location = useLocation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const status = queryParams.get('status');
-  const txn = queryParams.get('txn'); 
-  
+  const txn = queryParams.get('txn');
+
   useEffect(() => {
     const fetchPackage = async () => {
       try {
@@ -33,114 +34,147 @@ const UpgradePackage = () => {
       }
     };
     fetchPackage();
-  },[axiosSecure]);
+  }, [axiosSecure]);
 
   useEffect(() => {
     if (status) {
       if (status === 'success') {
         toast.success(`Package upgraded successfully! Transaction ID: ${txn}`);
       } else if (status === 'failed') {
-        toast.error('Payment failed or cancelled. Please try again.');
-      } else if (status === 'error') {
-        toast.error('An unexpected error in payment processing.');
+        toast.error('Payment failed or cancelled.');
       }
       navigate(location.pathname, { replace: true });
     }
   }, [status, txn, location.pathname, navigate]);
 
-  const StatusMessage = () => {
-    if (status === 'success') {
-      return (
-        <div className="alert alert-success mt-4">
-         <MdCheckCircle size={24} className="text-green-600" />
-          <div>
-            <h3 className="font-bold">Success!</h3>
-            <div className="text-sm">
-              Upgrade Successful! Your package limits have been updated.
-              Transaction ID: {txn}
-            </div>
-          </div>
-        </div>
-      );
-    }
-    if (status === 'failed' || status === 'error') {
-      return (
-        <div className="alert alert-error mt-4">
-          <MdCancel size={24} className="text-red-600" />
-          <div>
-            <h3 className="font-bold">Payment Failed!</h3>
-            <div className="text-sm">
-              Payment failed or an error occurred. Please select a package to
-              try again.
-            </div>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
-
   if (loading) {
-    <span className="loading loading-ring loading-xl text-primary"></span>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <span className="loading loading-spinner loading-lg text-indigo-500"></span>
+      </div>
+    );
   }
 
   return (
-    <div className="p-6 bg-secondary text-gray-300 rounded-xl shadow-2xl mt-6">
-      <h2 className="text-3xl font-extrabold mb-8 text-white border-b border-purple-700 pb-8">
-        🚀 Choose Your Upgrade Package
-      </h2>
-      <StatusMessage />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+    <div className="p-8 bg-[#0D0D15] rounded-3xl border border-white/5 shadow-2xl mt-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 border-b border-white/10 pb-8 gap-4">
+        <div>
+          <h2 className="text-4xl font-black text-white tracking-tight flex items-center gap-3">
+            <MdUpgrade className="text-indigo-500" /> Upgrade Plan
+          </h2>
+          <p className="text-gray-500 mt-2 font-medium">
+            Scale your business with higher employee limits
+          </p>
+        </div>
+      </div>
+
+      {status === 'success' && (
+        <div className="mb-8 p-5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center gap-4">
+          <MdCheckCircle className="text-emerald-500 text-3xl" />
+          <div>
+            <h4 className="text-emerald-500 font-bold">Upgrade Successful!</h4>
+            <p className="text-emerald-500/80 text-sm font-mono">TXN: {txn}</p>
+          </div>
+        </div>
+      )}
+
+      {(status === 'failed' || status === 'error') && (
+        <div className="mb-8 p-5 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-4">
+          <MdCancel className="text-red-500 text-3xl" />
+          <div>
+            <h4 className="text-red-500 font-bold">Payment Failed</h4>
+            <p className="text-red-500/80 text-sm">
+              Please try again or choose another package.
+            </p>
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
         {allPackage.map((pkg, i) => {
-          const isSelected = selectedPackage?.name === pkg.name;
+          const isSelected = selectedPackage?._id === pkg._id;
           return (
             <div
               key={i}
-              className={`border-2 p-6 rounded-xl text-center transition-all duration-300 transform ${
-                pkg.color
-              } ${
+              className={`relative overflow-hidden group p-8 rounded-[2rem] transition-all duration-500 border ${
                 isSelected
-                  ? 'shadow-[0_0_20px_rgba(168,85,247,0.5)] scale-[1.02] border-purple-500'
-                  : 'hover:shadow-lg hover:scale-[1.01] border-[#342757]'
+                  ? 'bg-indigo-600/10 border-indigo-500 shadow-[0_0_40px_rgba(79,70,229,0.15)] scale-[1.03]'
+                  : 'bg-[#161926] border-white/5 hover:border-white/20 hover:scale-[1.02]'
               }`}
             >
-              <div className="text-4xl mb-4 text-purple-400">
-                <MdAttachMoney className="mx-auto" />
-              </div>
-              <h3 className="text-3xl font-extrabold mb-3 text-white">
-                {pkg.name}
-              </h3>
-              <div className="flex items-center justify-center space-x-2 text-xl font-bold mb-4">
-                <span>Employee Limit: {pkg?.limit || pkg?.employeeLimit}</span>
+              {isSelected && (
+                <div className="absolute top-0 right-0 p-3">
+                  <MdCheckCircle className="text-indigo-500 text-2xl" />
+                </div>
+              )}
+
+              <div className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-500/20 transition-colors">
+                <MdAttachMoney className="text-3xl text-indigo-400" />
               </div>
 
-              <div className="text-5xl font-extrabold text-green-400 mb-6">
-                ${pkg.price}
+              <h3 className="text-2xl font-black text-white mb-2">
+                {pkg.name}
+              </h3>
+              <p className="text-gray-500 text-sm font-bold mb-6 uppercase tracking-widest">
+                Up to {pkg?.limit || pkg?.employeeLimit} Employees
+              </p>
+
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="text-5xl font-black text-white">
+                  ${pkg.price}
+                </span>
+                <span className="text-gray-500 font-bold">/lifetime</span>
               </div>
 
               <button
-                className={`btn w-full font-bold text-lg transition duration-300 ${
-                  isSelected
-                    ? 'bg-purple-600 text-white hover:bg-purple-700'
-                    : 'btn-outline border-purple-500 text-purple-400 hover:bg-purple-500 hover:text-white'
-                }`}
                 onClick={() => setSelectedPackage(pkg)}
+                className={`w-full py-4 rounded-2xl font-black transition-all duration-300 uppercase tracking-widest text-xs ${
+                  isSelected
+                    ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30'
+                    : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'
+                }`}
               >
-                {isSelected ? 'Selected' : 'Upgrade Now'}
+                {isSelected ? 'Selected Plan' : 'Select Package'}
               </button>
             </div>
           );
         })}
       </div>
+
       {selectedPackage && (
-        <div className="mt-12 p-6 bg-secondary rounded-xl shadow-inner">
-          <h3 className="text-xl font-bold mb-4 text-white border-b border-gray-600 pb-2">
-            Complete Payment for {selectedPackage.name} ($ {selectedPackage.price})
-          </h3>
-          <CheckoutForm
-            selectedPackage={selectedPackage}
-            onCancel={() => setSelectedPackage(null)}
-          />
+        <div className="mt-12 p-8 bg-[#11111D] border border-indigo-500/30 rounded-[2.5rem] shadow-3xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6">
+            <div>
+              <h3 className="text-2xl font-black text-white">
+                Secure Checkout
+              </h3>
+              <p className="text-gray-500 text-sm">
+                You've selected the{' '}
+                <span className="text-indigo-400 font-bold">
+                  {selectedPackage.name}
+                </span>{' '}
+                plan
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-black text-white">
+                ${selectedPackage.price}
+              </p>
+              <button
+                onClick={() => setSelectedPackage(null)}
+                className="text-xs text-red-400 font-bold uppercase tracking-tighter hover:text-red-300"
+              >
+                Change Plan
+              </button>
+            </div>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            <CheckoutForm
+              selectedPackage={selectedPackage}
+              onCancel={() => setSelectedPackage(null)}
+            />
+          </div>
         </div>
       )}
     </div>

@@ -2,12 +2,13 @@ import { useContext, useState } from 'react';
 import { useNavigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
   HiMenuAlt2,
-  HiX,
   HiOutlineHome,
   HiOutlineClipboardList,
   HiOutlineUsers,
   HiOutlineUserCircle,
   HiOutlineLogout,
+  HiBell,
+  HiSearch,
 } from 'react-icons/hi';
 import { AuthContext } from '../../../context/AuthContext/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,8 +18,7 @@ const EmployeeDashboard = () => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { logOut, user } = useContext(AuthContext);
-  
-   
+
   const handleLogout = () => {
     logOut();
     navigate('/login');
@@ -48,7 +48,7 @@ const EmployeeDashboard = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#0f111a] text-gray-300 font-sans">
+    <div className="flex min-h-screen bg-[#09090b] text-zinc-400 font-sans selection:bg-indigo-500/30">
       <AnimatePresence>
         {sidebarOpen && (
           <motion.div
@@ -56,110 +56,186 @@ const EmployeeDashboard = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSidebarOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-40 lg:hidden"
           />
         )}
       </AnimatePresence>
 
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-[#161926] border-r border-white/5 transform 
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-[#0c0c0e] border-r border-white/5 transform 
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-        lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl`}
+        lg:translate-x-0 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]`}
       >
         <div className="h-full flex flex-col">
-          <div className="p-8 flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-tr from-purple-600 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20 text-white font-black text-xl">
-              E
-            </div>
-            <div>
-              <h1 className="text-white font-black tracking-tight leading-none text-lg">
-                EMP-FLOW
-              </h1>
-              <p className="text-[10px] text-purple-400 font-bold uppercase tracking-widest mt-1">
-                Dashboard
-              </p>
+          <div className="p-8">
+            <div className="flex items-center gap-3 group cursor-pointer">
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-tr from-indigo-600 to-cyan-500 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                <div className="relative w-10 h-10 bg-zinc-900 rounded-xl flex items-center justify-center border border-white/10 text-white font-black text-xl">
+                  E
+                </div>
+              </div>
+              <div>
+                <h1 className="text-white font-black tracking-tighter text-xl italic">
+                  EMP<span className="text-indigo-500">FLOW</span>
+                </h1>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                  <p className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em]">
+                    Enterprise
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <nav className="flex-1 px-4 space-y-2 mt-4">
+          <div className="px-6 mb-4">
+            <div className="relative group">
+              <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-indigo-500 transition-colors" />
+              <input
+                type="text"
+                placeholder="Quick search..."
+                className="w-full bg-zinc-900/50 border border-white/5 rounded-xl py-2 pl-10 pr-4 text-xs font-bold outline-none focus:border-indigo-500/50 transition-all"
+              />
+            </div>
+          </div>
+
+          <nav className="flex-1 px-4 space-y-1.5 mt-4 overflow-y-auto custom-scrollbar">
+            <p className="px-4 text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em] mb-4">
+              Main Menu
+            </p>
             {menuItems.map(item => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) => `
-                  group flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 font-medium
+                  relative group flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 font-bold text-sm
                   ${
                     isActive
-                      ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20'
-                      : 'hover:bg-white/5 text-gray-400 hover:text-white'
+                      ? 'bg-indigo-500/10 text-indigo-400'
+                      : 'hover:bg-white/[0.03] text-zinc-500 hover:text-zinc-200'
                   }
                 `}
               >
-                <span className="group-hover:scale-110 transition-transform">
-                  {item.icon}
-                </span>
-                {item.label}
+                {({ isActive }) => (
+                  <>
+                    <span
+                      className={`transition-transform duration-300 ${
+                        isActive
+                          ? 'scale-110 text-indigo-500'
+                          : 'group-hover:scale-110 group-hover:text-zinc-200'
+                      }`}
+                    >
+                      {item.icon}
+                    </span>
+                    {item.label}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute left-0 w-1 h-6 bg-indigo-500 rounded-r-full"
+                      />
+                    )}
+                  </>
+                )}
               </NavLink>
             ))}
           </nav>
 
-          <div className="p-4 mt-auto">
-            <div className="bg-[#0f111a]/50 rounded-2xl p-4 border border-white/5">
-              <div className="flex items-center gap-3 mb-4">
-                <img
-                  src={user?.profileImage}
-                  className="w-10 h-10 rounded-full object-cover border-2 border-purple-500/30"
-                  alt="User"
-                />
-                <div className="overflow-hidden">
-                  <p className="text-sm font-bold text-white truncate">
-                    {user?.name || 'Employee'}
-                  </p>
-                  <p className="text-[10px] text-gray-500 truncate">
-                    {user?.email}
-                  </p>
-                </div>
+          <div className="p-6">
+            <div className="bg-zinc-900/40 rounded-4xl p-5 border border-white/5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                <HiOutlineUserCircle size={60} />
               </div>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all font-bold text-xs uppercase tracking-widest"
-              >
-                <HiOutlineLogout size={16} />
-                Logout
-              </button>
+
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="relative">
+                    <img
+                      src={user?.photoURL || user?.profileImage}
+                      className="w-11 h-11 rounded-2xl object-cover border border-white/10"
+                      alt="User"
+                    />
+                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-[#0c0c0e] rounded-full"></div>
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-sm font-black text-white truncate leading-tight">
+                      {user?.displayName || user?.name || 'Employee'}
+                    </p>
+                    <p className="text-[10px] text-zinc-500 font-bold truncate tracking-tight uppercase">
+                      {user?.role || 'Staff Member'}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-zinc-800 text-zinc-400 hover:bg-red-500 hover:text-white transition-all duration-300 font-black text-[10px] uppercase tracking-widest border border-white/5"
+                >
+                  <HiOutlineLogout size={16} />
+                  Sign Out
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </aside>
 
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <header className="h-20 bg-[#161926]/40 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-6 lg:px-10 flex-shrink-0">
-          <div className="flex items-center gap-4">
+        <header className="h-20 bg-[#09090b]/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-6 lg:px-10 shrink-0 z-30">
+          <div className="flex items-center gap-6">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 text-gray-400 hover:text-white bg-white/5 rounded-lg"
+              className="lg:hidden p-2.5 text-zinc-400 hover:text-white bg-white/5 rounded-xl border border-white/5 transition-all"
             >
-              <HiMenuAlt2 size={24} />
+              <HiMenuAlt2 size={22} />
             </button>
-            <h2 className="text-xl font-black text-white uppercase tracking-tight">
-              {menuItems.find(m => location.pathname === m.path)?.label ||
-                'Overview'}
-            </h2>
+            <div className="flex flex-col">
+              <h2 className="text-lg font-black text-white uppercase tracking-tighter italic">
+                {menuItems.find(m => location.pathname === m.path)?.label ||
+                  'Overview'}
+              </h2>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">
+                  Workspace
+                </span>
+                <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest px-2 py-0.5 bg-indigo-500/10 rounded">
+                  v2.0.4
+                </span>
+              </div>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-bold text-gray-500">
-            <span className="hidden sm:inline bg-purple-500/10 text-purple-400 px-3 py-1 rounded-full border border-purple-500/20 uppercase">
-              Active Session
-            </span>
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <div className="flex items-center gap-3">
+            <button className="p-2.5 text-zinc-500 hover:text-indigo-400 transition-colors relative">
+              <HiBell size={22} />
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-[#09090b]"></span>
+            </button>
+            <div className="h-8 w-px bg-white/5 mx-2 hidden sm:block"></div>
+            <div className="hidden sm:flex items-center gap-3 pl-2">
+              <div className="text-right">
+                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none mb-1">
+                  System Status
+                </p>
+                <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest leading-none">
+                  Operational
+                </p>
+              </div>
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.4)]"></div>
+            </div>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6 lg:p-10 bg-[#0f111a] custom-scrollbar">
-          <div className="max-w-7xl mx-auto">
+        <main className="flex-1 overflow-y-auto p-6 lg:p-10 bg-[#09090b] relative custom-scrollbar">
+          <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-indigo-500/5 to-transparent pointer-events-none"></div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="max-w-7xl mx-auto relative z-10"
+          >
             <Outlet />
-          </div>
+          </motion.div>
         </main>
       </div>
     </div>

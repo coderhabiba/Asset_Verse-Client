@@ -15,7 +15,7 @@ const useAxiosSecure = () => {
 
     instance.interceptors.request.use(
       config => {
-        const token = localStorage.getItem('access-token');
+        const token = localStorage.getItem('token');
         if (token) {
           config.headers.authorization = `Bearer ${token}`;
         }
