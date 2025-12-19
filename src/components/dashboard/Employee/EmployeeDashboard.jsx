@@ -114,7 +114,7 @@ const EmployeeDashboard = () => {
                   ${
                     isActive
                       ? 'bg-indigo-500/10 text-indigo-400'
-                      : 'hover:bg-white/[0.03] text-zinc-500 hover:text-zinc-200'
+                      : 'hover:bg-white/3 text-zinc-500 hover:text-zinc-200'
                   }
                 `}
               >
