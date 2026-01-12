@@ -6,6 +6,8 @@ import FeaturesShowcase from "../../components/Home/FeaturesShowcase/FeaturesSho
 import HowItWorks from "../../components/Home/HowItWorks/HowItWorks";
 import Packages from "../../components/Home/Packages/Packages";
 import TestimonialsStats from "../../components/Home/TestimonialsStats/TestimonialsStats";
+import Blogs from './../../components/Home/Blogs/Blogs';
+import Categories from './../../components/Categories/Categories';
 
 const Home = () => {
   return (
@@ -16,7 +18,9 @@ const Home = () => {
       <FeaturesShowcase />
       <TestimonialsStats />
       <HowItWorks />
+      <Categories/>
       <FAQ />
+      <Blogs/>
       <ContactCTA/>
     </div>
   );

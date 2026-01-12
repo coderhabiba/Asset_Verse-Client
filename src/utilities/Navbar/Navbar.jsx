@@ -1,10 +1,12 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   RiLoginBoxLine,
   RiLogoutBoxRLine,
   RiDashboardLine,
   RiUserLine,
+  RiSunLine,
+  RiMoonLine,
 } from 'react-icons/ri';
 import { FaBars, FaTimes, FaUserCircle } from 'react-icons/fa';
 import { AuthContext } from '../../context/AuthContext/AuthContext';
@@ -19,6 +21,22 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Theme State
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
   const userPhoto =
     user?.photo || user?.profileImage || user?.companyLogo || user?.photoURL;
   const userName = user?.name || user?.displayName || 'User';
@@ -29,7 +47,7 @@ const Navbar = () => {
     `relative px-4 py-2 transition-all duration-300 text-sm font-semibold tracking-wide flex items-center gap-2 rounded-xl ${
       isActive
         ? 'text-white bg-purple-600/20 shadow-[0_0_15px_rgba(147,51,234,0.3)] border border-purple-500/30'
-        : 'text-gray-400 hover:text-white hover:bg-white/5'
+        : 'text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'
     }`;
 
   const handleLogOut = async () => {
@@ -150,21 +168,31 @@ const Navbar = () => {
   );
 
   return (
-    <header className="bg-[#0D0D15]/80 backdrop-blur-xl text-white shadow-2xl border-b border-white/5 sticky top-0 z-50">
+    <header className="bg-[#0D0D15]/80 backdrop-blur-xl text-gray-800 dark:text-white shadow-2xl border-b border-gray-200 dark:border-white/5 sticky top-0 z-50 transition-colors duration-300">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex justify-between items-center h-20">
-         
           <div className="flex-shrink-0">
             <Logo />
           </div>
 
-         
           <nav className="hidden md:flex items-center">
             {!user && PublicMenuLinks}
           </nav>
 
           <div className="flex items-center gap-4">
-            {/* লগইন বাটন */}
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-purple-600 dark:text-purple-400 hover:scale-110 transition-all shadow-sm"
+              aria-label="Toggle Theme"
+            >
+              {theme === 'dark' ? (
+                <RiSunLine size={20} />
+              ) : (
+                <RiMoonLine size={20} />
+              )}
+            </button>
+
             {!user && (
               <NavLink
                 className="hidden md:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl hover:shadow-[0_0_20px_rgba(147,51,234,0.5)] transition-all duration-300 active:scale-95"
@@ -174,12 +202,11 @@ const Navbar = () => {
               </NavLink>
             )}
 
-           
             {user && (
               <div className="dropdown dropdown-end">
                 <label
                   tabIndex={0}
-                  className="flex items-center gap-3 p-1.5 pr-4 rounded-2xl hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-white/10 group"
+                  className="flex items-center gap-3 p-1.5 pr-4 rounded-2xl hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-gray-200 dark:hover:border-white/10 group"
                 >
                   <div className="relative">
                     {userPhoto ? (
@@ -191,13 +218,13 @@ const Navbar = () => {
                     ) : (
                       <FaUserCircle size={40} className="text-purple-400" />
                     )}
-                    <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-[#0D0D15] rounded-full"></span>
+                    <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-[#0D0D15] rounded-full"></span>
                   </div>
                   <div className="hidden lg:block text-left">
-                    <p className="text-sm font-bold text-white leading-tight">
+                    <p className="text-sm font-bold text-gray-800 dark:text-white leading-tight">
                       {userName}
                     </p>
-                    <p className="text-[10px] text-purple-400 font-medium uppercase tracking-wider">
+                    <p className="text-[10px] text-purple-600 dark:text-purple-400 font-medium uppercase tracking-wider">
                       {user?.role || 'Member'}
                     </p>
                   </div>
@@ -205,21 +232,21 @@ const Navbar = () => {
 
                 <ul
                   tabIndex={0}
-                  className="dropdown-content mt-4 p-2 shadow-2xl bg-[#161625] border border-white/10 rounded-2xl w-64 backdrop-blur-2xl"
+                  className="dropdown-content mt-4 p-2 shadow-2xl bg-white dark:bg-[#161625] border border-gray-200 dark:border-white/10 rounded-2xl w-64 backdrop-blur-2xl"
                 >
-                  <div className="px-4 py-3 mb-2 border-b border-white/5">
-                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">
+                  <div className="px-4 py-3 mb-2 border-b border-gray-100 dark:border-white/5">
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest mb-1">
                       Signed in as
                     </p>
-                    <p className="text-sm font-semibold truncate text-purple-300">
+                    <p className="text-sm font-semibold truncate text-purple-600 dark:text-purple-300">
                       {user?.email}
                     </p>
                   </div>
                   <div className="space-y-1">{dashboardLinks}</div>
-                  <div className="mt-2 pt-2 border-t border-white/5">
+                  <div className="mt-2 pt-2 border-t border-gray-100 dark:border-white/5">
                     <button
                       onClick={handleLogOut}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-xl transition-all font-bold text-sm"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-500/10 rounded-xl transition-all font-bold text-sm"
                     >
                       <RiLogoutBoxRLine size={18} /> Logout
                     </button>
@@ -231,7 +258,7 @@ const Navbar = () => {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2.5 bg-white/5 text-gray-300 hover:text-white rounded-xl border border-white/10 transition-all"
+                className="p-2.5 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-white rounded-xl border border-gray-200 dark:border-white/10 transition-all"
               >
                 {isMenuOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
               </button>
@@ -240,19 +267,18 @@ const Navbar = () => {
         </div>
       </div>
 
-    
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-full left-0 w-full bg-[#0D0D15] border-t border-white/5 shadow-2xl p-6"
+            className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-[#0D0D15] border-t border-gray-200 dark:border-white/5 shadow-2xl p-6"
           >
             <div className="flex flex-col gap-4">
               {user ? (
                 <div className="space-y-2">
-                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest px-4 mb-2">
+                  <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-4 mb-2">
                     Navigation
                   </p>
                   {dashboardLinks}
