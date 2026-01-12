@@ -24,7 +24,7 @@ const Logo = () => {
       </div>
 
       <div className="flex flex-col">
-        <h1 className="text-xl lg:text-2xl font-black tracking-tighter text-white leading-none">
+        <h1 className="text-xl lg:text-2xl font-black tracking-tighter leading-none">
           ASSET
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
             VERSE

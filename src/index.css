@@ -2,9 +2,32 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-body{
-  background-image: linear-gradient(to bottom right, #18122C, #020204);
-  min-height: 100vh;
-  background-attachment: fixed;
-  font-family: "Montserrat", sans-serif;
+:root {
+  /* Light Mode - Studio Glass Look */
+  --bg-main: #EDF1F7;
+  --bg-gradient: radial-gradient(circle at top left, #FFFFFF 0%, #E2E8F0 100%);
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --card-bg: rgba(255, 255, 255, 0.8);
+}
+
+.dark {
+  /* Dark Mode - Signature Deep Space */
+  --bg-main: #020204;
+  --bg-gradient: linear-gradient(to bottom right, #18122C, #020204);
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --card-bg: rgba(255, 255, 255, 0.03);
+}
+
+@layer base {
+  body {
+    background-image: var(--bg-gradient);
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+    background-attachment: fixed;
+    font-family: "Montserrat", sans-serif;
+    transition: all 0.5s ease-in-out;
+  }
 }

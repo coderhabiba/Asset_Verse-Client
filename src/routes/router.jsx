@@ -20,6 +20,10 @@ import RequestAsset from '../components/dashboard/Employee/RequestAsset/RequestA
 import MyTeam from '../components/dashboard/Employee/MyTeam/MyTeam';
 import ProfilePage from '../components/dashboard/Employee/Profile/ProfilePage';
 import HRProfileUpdate from '../components/dashboard/HR/Profile/HRProfileUpdate';
+import Privacy from './../utilities/Footer/extra/Privacy';
+import Terms from './../utilities/Footer/extra/Terms';
+import Status from './../utilities/Footer/extra/Status';
+import Cookies from './../utilities/Footer/extra/Cookies';
 
 export const router = createBrowserRouter([
   {
@@ -104,6 +108,24 @@ export const router = createBrowserRouter([
           { path: 'profile', element: <ProfilePage /> },
         ],
       },
+
+      // footer 
+      {
+        path: 'privacy',
+        Component: Privacy
+      },
+      {
+        path: 'terms',
+        Component: Terms
+      },
+      {
+        path: 'status',
+        Component: Status
+      },
+      {
+        path: 'cookies',
+        Component: Cookies
+      }
     ],
   },
 ]);

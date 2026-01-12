@@ -168,7 +168,7 @@ const Navbar = () => {
   );
 
   return (
-    <header className="bg-[#0D0D15]/80 backdrop-blur-xl text-gray-800 dark:text-white shadow-2xl border-b border-gray-200 dark:border-white/5 sticky top-0 z-50 transition-colors duration-300">
+    <header className="backdrop-blur-xl shadow-2xl border-b border-gray-200 dark:border-white/5 sticky top-0 z-50 transition-colors duration-300">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex justify-between items-center h-20">
           <div className="flex-shrink-0">
@@ -221,7 +221,7 @@ const Navbar = () => {
                     <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-[#0D0D15] rounded-full"></span>
                   </div>
                   <div className="hidden lg:block text-left">
-                    <p className="text-sm font-bold text-gray-800 dark:text-white leading-tight">
+                    <p className="text-sm font-bold leading-tight">
                       {userName}
                     </p>
                     <p className="text-[10px] text-purple-600 dark:text-purple-400 font-medium uppercase tracking-wider">
