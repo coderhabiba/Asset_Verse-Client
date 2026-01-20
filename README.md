@@ -4,6 +4,12 @@
 
 - **Live URL:** [https://asset-verse.netlify.app](https://asset-verse.netlify.app)
 
+  ## 📸 Project Preview
+
+<p align="center">
+  <img src="https://i.ibb.co.com/Lzz7qJ04/Screenshot-2026-01-02-125200.png" alt="AssetVerse Screenshot" width="800">
+</p>
+
 ## 🚀 Key Features
 * **Role-Based Access Control:** Dedicated dashboards for Employees and HR Managers.
 * **Dynamic Inventory:** Real-time tracking of returnable and non-returnable assets.
